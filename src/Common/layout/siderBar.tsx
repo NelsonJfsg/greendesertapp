@@ -94,14 +94,14 @@ export const SideBar = ({drawerWidth = 340}) => {
                     </ListItem>
                   </ListItemButton>
 
-                  <ListItemButton onClick={() => {redirectPage('')}}>
+                  <ListItemButton onClick={() => {redirectPage(Directory.reviewCustomer)}}>
                     <ListItem sx={{ml: 2}}>
                       <Hail/>
                       <ListItemText secondary = {'Visualizar clientes'}/>
                     </ListItem>  
                   </ListItemButton>
 
-                  <ListItemButton onClick={() => {alert('jalamos al 100');}}>
+                  <ListItemButton onClick={() => {}}>
                     <ListItem>
                       <Inventory/>
                       <ListItemText primary = {'Inventario'}/>
@@ -115,14 +115,14 @@ export const SideBar = ({drawerWidth = 340}) => {
                     </ListItem>
                   </ListItemButton>
 
-                  <ListItemButton onClick={() => {navigate('/inventory/review');}}>
+                  <ListItemButton onClick={() => {Directory.reviewInventory}}>
                     <ListItem sx={{ml: 2}}>
                       <Inventory/>
                       <ListItemText secondary = {'Visualizar inventario'}/>
                     </ListItem>
                   </ListItemButton>
                   
-                  <ListItemButton onClick={() => {alert('tamos jalando al 100');}}>
+                  <ListItemButton onClick={() => {}}>
                     <ListItem>
                       <LocalShipping/>
                       <ListItemText primary = {'Provedores'}/>
@@ -136,7 +136,7 @@ export const SideBar = ({drawerWidth = 340}) => {
                     </ListItem>
                   </ListItemButton>
 
-                  <ListItemButton onClick={() => {redirectPage('')}}>
+                  <ListItemButton onClick={() => {redirectPage(Directory.reviewProveedores)}}>
                     <ListItem sx={{ml: 2}}>
                       <LocalShipping/>
                       <ListItemText secondary = {'Visualizar provedores'}/>
@@ -157,7 +157,7 @@ export const SideBar = ({drawerWidth = 340}) => {
                     </ListItem>
                   </ListItemButton>
 
-                  <ListItemButton onClick={() => {navigate('/product/review');}}>
+                  <ListItemButton onClick={() => {redirectPage(Directory.reviewProduct)}}>
                     <ListItem sx={{ml: 2}}>
                       <Category/>
                       <ListItemText secondary = {'Visualizar productos'}/>
