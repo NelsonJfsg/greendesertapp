@@ -21,8 +21,10 @@ export const EmployeeRoutes = () => {
       
       <Routes>
         <Route path='/add' element={<AddEmployePage/>}/>
+        <Route path='/review' element={<EmployeePage/>}/>
+        
 
-        <Route path='/*' element={<Navigate to='add'/>}/>
+        <Route path='/*' element={<Navigate to='review'/>}/>
         
       </Routes>
   
