@@ -8,7 +8,7 @@ import { Directory } from "../dictionary/routeDirectory";
 
 const redirectPage = (link : string) => {
   window.location.href = link;
-
+  alert(link);
 }
 
 export const SideBar = ({drawerWidth = 340}) => {
