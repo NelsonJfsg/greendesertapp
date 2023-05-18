@@ -1,14 +1,21 @@
-import { Category, FireTruck, Google, Hail, Inventory, LocalShipping, Menu, MenuBook, Person, TurnedInNot } from "@mui/icons-material"
+import { Category, FireTruck, Google, Hail, Inventory, LocalShipping, Menu, MenuBook, Person, TurnedInNot, WindowSharp } from "@mui/icons-material"
 import { Box, Divider, Drawer, Grid, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material"
-import { Link } from "react-router-dom";
+import { Link, redirect } from "react-router-dom";
 import { EmployeeRoutes } from "../../Routers/EmployeeRoutes";
 import { useNavigate } from 'react-router-dom';
+import { Directory } from "../dictionary/routeDirectory";
+
+
+const redirectPage = (link : string) => {
+  window.location.href = link;
+}
 
 export const SideBar = ({drawerWidth = 340}) => {
 
   let options = ['Inventario', 'Clientes', 'Empleados', 'Proveedores'];
   let descriptions = ['asd','b','c','d'];
   const navigate = useNavigate()
+
 
   return (
 
@@ -57,14 +64,14 @@ export const SideBar = ({drawerWidth = 340}) => {
                   </ListItemButton>
 
                   
-                  <ListItemButton onClick={() => {navigate('/employee/add');}}>
+                  <ListItemButton onClick={() => {redirectPage(Directory.addEmployee)}}>
                     <ListItem sx={{ml: 2}}>
                       <Person/>
                       <ListItemText secondary = {'Agregar empleados'}/>
                     </ListItem>
                   </ListItemButton>
 
-                  <ListItemButton onClick={() => {navigate('/employee/review')}}>
+                  <ListItemButton onClick={() => {redirectPage(Directory.reviewEmployee);}}>
                     <ListItem sx={{ml: 2}}>
                       <Person/>
                       <ListItemText secondary = {'Visualizar empleados'}/>
@@ -79,14 +86,14 @@ export const SideBar = ({drawerWidth = 340}) => {
                   </ListItemButton>
 
                   
-                  <ListItemButton onClick={() => {navigate('costumer/add');}}>
+                  <ListItemButton onClick={() => {redirectPage(Directory.addCustomer)}}>
                     <ListItem sx={{ml: 2}}>
                       <Hail/>
                       <ListItemText secondary = {'Agregar cliente'}/>
                     </ListItem>
                   </ListItemButton>
 
-                  <ListItemButton onClick={() => {navigate('/costumer/review');}}>
+                  <ListItemButton onClick={() => {redirectPage('')}}>
                     <ListItem sx={{ml: 2}}>
                       <Hail/>
                       <ListItemText secondary = {'Visualizar clientes'}/>
@@ -100,7 +107,7 @@ export const SideBar = ({drawerWidth = 340}) => {
                     </ListItem>
                   </ListItemButton>
 
-                  <ListItemButton onClick={() => {navigate('/inventory/add');}}>
+                  <ListItemButton onClick={() => {redirectPage(Directory.addInventory)}}>
                     <ListItem sx={{ml: 2}}>
                       <Inventory/>
                       <ListItemText secondary = {'Registrar entrada'}/>
@@ -121,14 +128,14 @@ export const SideBar = ({drawerWidth = 340}) => {
                     </ListItem>
                   </ListItemButton>
 
-                  <ListItemButton onClick={() => {navigate('/provider/add');}}>
+                  <ListItemButton onClick={() => {redirectPage(Directory.addProvider)}}>
                     <ListItem sx={{ml: 2}}>
                       <LocalShipping/>
                       <ListItemText secondary = {'Agregar proveedor'}/>
                     </ListItem>
                   </ListItemButton>
 
-                  <ListItemButton onClick={() => {navigate('/provider/review');}}>
+                  <ListItemButton onClick={() => {redirectPage('')}}>
                     <ListItem sx={{ml: 2}}>
                       <LocalShipping/>
                       <ListItemText secondary = {'Visualizar provedores'}/>
@@ -142,7 +149,7 @@ export const SideBar = ({drawerWidth = 340}) => {
                     </ListItem>
                   </ListItemButton>
 
-                  <ListItemButton onClick={() => {navigate('/product/add');}}>
+                  <ListItemButton onClick={() => {redirectPage(Directory.addProduct)}}>
                     <ListItem sx={{ml: 2}}>
                       <Category/>
                       <ListItemText secondary = {'Agregar producto'}/>
@@ -164,4 +171,5 @@ export const SideBar = ({drawerWidth = 340}) => {
       </Drawer>
     </Box>
   )
+
 }
