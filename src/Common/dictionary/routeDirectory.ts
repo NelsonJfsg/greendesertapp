@@ -1,12 +1,12 @@
 export class Directory  {
 
   //RootURL
-  static rootURL : string = 'http://localhost:5173/';
+  static rootURL : string = 'https://proveedores--moonlit-elf-cb67e7.netlify.app';
 
   //Auth
 
   //Employee
-  static  addEmployee : string = this.rootURL + 'employee/add';
+  static  addEmployee : string = 'employee/add';
   static  reviewEmployee : string = this.rootURL + 'employee/review';
   
   //Inventory
@@ -26,6 +26,6 @@ export class Directory  {
   static addjoborder : string = this.rootURL + 'customer/add'
 
   //Home
-  
+
 
 }
