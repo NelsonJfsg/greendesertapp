@@ -1,4 +1,4 @@
-import { Category, FireTruck, Google, Hail, Inventory, LocalShipping, Menu, MenuBook, Person, TurnedInNot, WindowSharp } from "@mui/icons-material"
+import { Category, Work, Google, Hail, Inventory, LocalShipping, Menu, MenuBook, Person, TurnedInNot, WindowSharp } from "@mui/icons-material"
 import { Box, Divider, Drawer, Grid, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material"
 import { Link, redirect } from "react-router-dom";
 import { EmployeeRoutes } from "../../Routers/EmployeeRoutes";
@@ -163,6 +163,28 @@ export const SideBar = ({drawerWidth = 340}) => {
                       <ListItemText secondary = {'Visualizar productos'}/>
                     </ListItem>
                   </ListItemButton>
+
+                  <ListItemButton onClick={() => {alert('tamos jalando al 100');}}>
+                    <ListItem>
+                      <Work/>
+                      <ListItemText primary = {'Orden de trabajo'}/>
+                    </ListItem>
+                  </ListItemButton>
+
+                  <ListItemButton onClick={() => {redirectPage(Directory.addjoborder)}}>
+                    <ListItem sx={{ml: 2}}>
+                      <Work/>
+                      <ListItemText secondary = {'Agregar orden de trabajo'}/>
+                    </ListItem>
+                  </ListItemButton>
+
+                  <ListItemButton onClick={() => {redirectPage(Directory.reviewJoborder)}}>
+                    <ListItem sx={{ml: 2}}>
+                      <Work/>
+                      <ListItemText secondary = {'Visualizar orden de trabajo'}/>
+                    </ListItem>
+                  </ListItemButton>
+
                     
                 </Grid>
 

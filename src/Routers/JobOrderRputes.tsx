@@ -25,7 +25,7 @@ export const JobOrderRoutes = () => {
       
       <Routes>
       <Route path='/add' element={<AddJobOrderpage/>}/>
-      <Route path='/' element={<JobOrderpage/>}/>
+      <Route path='/review' element={<JobOrderpage/>}/>
     </Routes>
   
 

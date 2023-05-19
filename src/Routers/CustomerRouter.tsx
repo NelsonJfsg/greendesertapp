@@ -25,7 +25,8 @@ export const CustomerRoute = () => {
       
       <Routes>
       <Route path='/add' element={<AddCustomerpage/>}/>
-      <Route path='/' element={<Customerpage/>}/>
+      <Route path='/review' element={<Customerpage/>}/>
+
     </Routes>
   
 
