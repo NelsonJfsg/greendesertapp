@@ -15,15 +15,19 @@ export class Directory  {
 
   //Proveedores
   static addProvider : string = this.rootURL + 'proveedores/add'
+  static reviewProveedores : string = this.rootURL + 'proveedores/review';
 
   //Productos
   static addProduct : string = this.rootURL + 'productos/add'
+  static reviewProduct : string = this.rootURL + 'productos/review';
   
   //Customer
   static addCustomer : string = this.rootURL + 'customer/add'
+  static reviewCustomer : string = this.rootURL + 'customer/review';
 
   //JobOrder
-  static addjoborder : string = this.rootURL + 'customer/add'
+  static addjoborder : string = this.rootURL + 'joborder/add'
+  static reviewJoborder : string = this.rootURL + 'joborder/review';
 
   //Home
 
