@@ -8,7 +8,6 @@ import { Directory } from "../dictionary/routeDirectory";
 
 const redirectPage = (link : string) => {
   window.location.href = link;
-  alert(link);
 }
 
 export const SideBar = ({drawerWidth = 340}) => {
@@ -108,13 +107,6 @@ export const SideBar = ({drawerWidth = 340}) => {
                     </ListItem>
                   </ListItemButton>
 
-                  <ListItemButton onClick={() => {redirectPage(Directory.addInventory)}}>
-                    <ListItem sx={{ml: 2}}>
-                      <Inventory/>
-                      <ListItemText secondary = {'Registrar entrada'}/>
-                    </ListItem>
-                  </ListItemButton>
-
                   <ListItemButton onClick={() => {Directory.reviewInventory}}>
                     <ListItem sx={{ml: 2}}>
                       <Inventory/>
@@ -143,17 +135,10 @@ export const SideBar = ({drawerWidth = 340}) => {
                     </ListItem>
                   </ListItemButton>
                   
-                  <ListItemButton onClick={() => {alert('tamos jalando al 100');}}>
+                  <ListItemButton onClick={() => {}}>
                     <ListItem>
                       <Category/>
                       <ListItemText primary = {'Productos'}/>
-                    </ListItem>
-                  </ListItemButton>
-
-                  <ListItemButton onClick={() => {redirectPage(Directory.addProduct)}}>
-                    <ListItem sx={{ml: 2}}>
-                      <Category/>
-                      <ListItemText secondary = {'Agregar producto'}/>
                     </ListItem>
                   </ListItemButton>
 
@@ -164,7 +149,7 @@ export const SideBar = ({drawerWidth = 340}) => {
                     </ListItem>
                   </ListItemButton>
 
-                  <ListItemButton onClick={() => {alert('tamos jalando al 100');}}>
+                  <ListItemButton onClick={() => {}}>
                     <ListItem>
                       <Work/>
                       <ListItemText primary = {'Orden de trabajo'}/>
