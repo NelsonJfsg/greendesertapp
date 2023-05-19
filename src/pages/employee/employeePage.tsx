@@ -280,7 +280,6 @@ export const EmployeePage = () => {
     <>
       <Typography variant='h3' textAlign={'center'}> Empleados Registrados</Typography>
       <br />
-      <Button color='error' variant="outlined" onClick={handleac}>actualizar</Button>
       <Grid container columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         <TableContainer>
           <Table>
@@ -296,6 +295,10 @@ export const EmployeePage = () => {
                 <TableCell>Fecha de Nacimiento</TableCell>
                 <TableCell>Telefono Celular</TableCell>
                 <TableCell>Acciones</TableCell>
+                <TableCell>
+                              <Button color='info' variant="outlined" onClick={handleac}>Comprobar Estado</Button>
+
+                            </TableCell>
               </TableRow>
 
             </TableHead>

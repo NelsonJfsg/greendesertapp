@@ -1,10 +1,11 @@
+import { employeeModel } from "./employee.model";
 import { IInventory } from "./inventory.model";
 
 export interface Ijobordermodel{
     quantity: number;
     customer: number;
-    employee: number;
+    employee: employeeModel;
     status: boolean;
-    inventory: IInventory;
+    inventory: IInventory[];
     product?: number;
 }

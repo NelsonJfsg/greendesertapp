@@ -10,6 +10,7 @@ import * as yup from 'yup'
 import { IProvider } from '../../assets/models/provider.model'
 import { IProduct } from '../../assets/models/product.model'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { uuid } from '../../services/auth/AuthRouter'
 
 
 let idTest: number
@@ -43,6 +44,70 @@ const getId = (id: number): any => {
     )
 }
 const Productpage = () => {
+
+    // const auth = getAuth()
+  const [disable, setDisable] = useState(true)
+  // const [uuid, setuuid] = useState<any>()
+  // const [loading, setLoading] = useState(false)
+  const [user2, setUser2] = useState<any>({})
+
+
+  //   useEffect(() => {
+  //       AuthCheck()
+  //   }, [])
+
+  // const AuthCheck = onAuthStateChanged(auth, (user) => {
+
+  //   if (user) {
+  //     setuuid(user.uid)
+  //     setLoading(false)
+  //     console.log(user.uid)
+
+
+
+
+  //   }
+  // });
+  
+
+  useEffect(() => {
+    axios({
+      method: 'GET',
+      url: `https://apigreendesert.onrender.com/user/one/${uuid}`
+    }).then((res) => {
+      console.log(res.data)
+      setUser2(res.data)
+      console.log(user2)
+
+      if (user2.role.id == 1) {
+        console.log('soy admin')
+        setDisable(false)
+      } else {
+        console.log('soy operador')
+        setDisable(true)
+      }
+    })
+  }, [])
+
+
+  const handleac = () => {
+    axios({
+      method: 'GET',
+      url: `https://apigreendesert.onrender.com/user/one/${uuid}`
+    }).then((res) => {
+      console.log(res.data)
+      setUser2(res.data)
+      console.log(user2)
+
+      if (user2.role.id == 1) {
+        console.log('soy admin')
+        setDisable(false)
+      } else {
+        console.log('soy operador')
+        setDisable(true)
+      }
+    })
+  }
 
     // const [disable, setDisable] = useState(false)
     // const [uuid, setuuid] = useState<any>()
@@ -248,6 +313,10 @@ const Productpage = () => {
                             <TableCell>proveedor</TableCell>
 
                             <TableCell>Acciones</TableCell>
+                            <TableCell>
+                              <Button color='info' variant="outlined" onClick={handleac}>Comprobar Estado</Button>
+
+                            </TableCell>
                         </TableRow>
 
                     </TableHead>
@@ -263,7 +332,7 @@ const Productpage = () => {
                                     <TableCell>{t.image}</TableCell>
                                     <TableCell>{t.provider.name}</TableCell>
                                     <TableCell>
-                                        <Button color='success' variant='outlined' onClick={async () => {
+                                        <Button color='success'disabled={disable} variant='outlined' onClick={async () => {
                                             await getIdv5(t.id).then(async (res) => {
                                                 await handleOpen2()
 
@@ -273,7 +342,7 @@ const Productpage = () => {
                                         }}>Editar</Button>
 
 
-                                        &nbsp; <Button color='error' variant="outlined" onClick={() => {
+                                        &nbsp; <Button color='error'disabled={disable} variant="outlined" onClick={() => {
 
                                             getId(t.id)
 

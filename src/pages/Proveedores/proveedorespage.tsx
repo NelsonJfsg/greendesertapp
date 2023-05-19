@@ -10,6 +10,7 @@ import * as yup from 'yup'
 import { IProvider } from '../../assets/models/provider.model'
 import { IProduct } from '../../assets/models/product.model'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { uuid } from '../../services/auth/AuthRouter'
 
 
 let idTest: number
@@ -43,6 +44,69 @@ const getId = (id: number): any => {
     )
 }
 const Proveedorespage = () => {
+    // const auth = getAuth()
+  const [disable, setDisable] = useState(true)
+  // const [uuid, setuuid] = useState<any>()
+  // const [loading, setLoading] = useState(false)
+  const [user2, setUser2] = useState<any>({})
+
+
+  //   useEffect(() => {
+  //       AuthCheck()
+  //   }, [])
+
+  // const AuthCheck = onAuthStateChanged(auth, (user) => {
+
+  //   if (user) {
+  //     setuuid(user.uid)
+  //     setLoading(false)
+  //     console.log(user.uid)
+
+
+
+
+  //   }
+  // });
+  
+
+  useEffect(() => {
+    axios({
+      method: 'GET',
+      url: `https://apigreendesert.onrender.com/user/one/${uuid}`
+    }).then((res) => {
+      console.log(res.data)
+      setUser2(res.data)
+      console.log(user2)
+
+      if (user2.role.id == 1) {
+        console.log('soy admin')
+        setDisable(false)
+      } else {
+        console.log('soy operador')
+        setDisable(true)
+      }
+    })
+  }, [])
+
+
+  const handleac = () => {
+    axios({
+      method: 'GET',
+      url: `https://apigreendesert.onrender.com/user/one/${uuid}`
+    }).then((res) => {
+      console.log(res.data)
+      setUser2(res.data)
+      console.log(user2)
+
+      if (user2.role.id == 1) {
+        console.log('soy admin')
+        setDisable(false)
+      } else {
+        console.log('soy operador')
+        setDisable(true)
+      }
+    })
+  }
     // const [disable, setDisable] = useState(false)
     // const [uuid, setuuid] = useState<any>()
     // const auth = getAuth()
@@ -364,6 +428,10 @@ const Proveedorespage = () => {
                             <TableCell>Estatus</TableCell>
                             <TableCell>Nombre del producto</TableCell>
                             <TableCell>Acciones</TableCell>
+                            <TableCell>
+                              <Button color='info' variant="outlined" onClick={handleac}>Comprobar Estado</Button>
+
+                            </TableCell>
                         </TableRow>
 
                     </TableHead>
@@ -381,7 +449,7 @@ const Proveedorespage = () => {
                                     <TableCell>{`${t.status}`}</TableCell>
                                     <TableCell>{JSON.stringify(`${t.product.name}`)}</TableCell>
                                     <TableCell>
-                                        <Button color='success' variant='outlined' onClick={async () => {
+                                        <Button color='success'disabled={disable} variant='outlined' onClick={async () => {
                                             await getIdv5(t.id).then(async (res) => {
                                                 await handleOpen()
 
@@ -391,13 +459,13 @@ const Proveedorespage = () => {
                                         }}>Editar</Button>
 
 
-                                        &nbsp; <Button color='error' variant="outlined" onClick={() => {
+                                        &nbsp; <Button color='error'disabled={disable} variant="outlined" onClick={() => {
 
                                             getId(t.id)
 
                                             // axios.delete(`https://apigreendesert.onrender.com/employee/delete/${t.id}`).then((res)=>{console.log(res)}).catch((err)=>{console.log(err)})
                                         }}>Eliminar</Button>  &nbsp;
-                                        <Button color='success' variant='outlined' onClick={async () => {
+                                        <Button color='info'disabled={disable} variant='outlined' onClick={async () => {
                                             // await getIdv5(t.id).then(async (res) => {
 
                                             // })

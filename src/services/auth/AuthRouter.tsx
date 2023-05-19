@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {beforeAuthStateChanged, getAuth, onAuthStateChanged} from 'firebase/auth'
 import { useNavigate } from 'react-router-dom';
 export let uuid :any
+export let email :any
 export interface IAuthRouterProps {};
 
 const AuthRouter:React.FunctionComponent<IAuthRouterProps> = (props) => {
@@ -18,6 +19,7 @@ const AuthRouter:React.FunctionComponent<IAuthRouterProps> = (props) => {
     const AuthCheck = onAuthStateChanged(auth, (user)=>{
         if(user){
             uuid = user.uid
+            email= user.email
             setLoading(false)
         }else{
             console.log('unauthorized')
