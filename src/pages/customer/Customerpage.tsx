@@ -17,7 +17,7 @@ let idTest: number
 let idt: number
 
 let idTest2: number
-debugger
+
 let uid = uuid
 
 // 
@@ -61,51 +61,51 @@ const getId = (id: number): any => {
                     'Los datos han sido eliminados',
                     'success'
                 )
-                axios.delete(`https://apigreendesert.onrender.com/customer/delete/${id}`).then((res) => { console.log(res) }).catch((err) => { console.log(err) })
+                axios.delete(`https://apigreendesert.onrender.com/customer/delete/${id}`).then((res) => { console.log(res), window.location.reload() }).catch((err) => { console.log(err) })
             }
         })
     )
 }
 const Customerpage = () => {
-    const [disable, setDisable] = useState(false)
-    const [uuid, setuuid] = useState<any>()
-    const auth = getAuth()
-    const [loading, setLoading] = useState(false)
-    const [user2, setUser2]= useState<any>({})
+    // const [disable, setDisable] = useState(false)
+    // const [uuid, setuuid] = useState<any>()
+    // const auth = getAuth()
+    // const [loading, setLoading] = useState(false)
+    // const [user2, setUser2]= useState<any>({})
 
 
-    useEffect(() => {
-        AuthCheck()
-    }, [auth])
+    // useEffect(() => {
+    //     AuthCheck()
+    // }, [auth])
 
-    const AuthCheck = onAuthStateChanged(auth, (user) => {
-        if (user) {
-             setuuid(user.uid) 
-            setLoading(false)
-            console.log(user.uid)
-            
-                axios({
-                    method: 'GET',
-                    url: `https://apigreendesert.onrender.com/user/one/${user.uid}`
-                }).then((res) => {
-                    console.log(res.data)
-                    setUser2(res.data)
-                    console.log(user2)
+    // const AuthCheck = onAuthStateChanged(auth, (user) => {
+    //     if (user) {
+    //          setuuid(user.uid) 
+    //         setLoading(false)
+    //         console.log(user.uid)
 
-                    if(user2.role.id == 1){
-                        console.log('soy operador')
-                        setDisable(true)
-                    }else{
-                        console.log('soy admin')
-                        setDisable(false)
-                    }
-                })
-            
+    //             axios({
+    //                 method: 'GET',
+    //                 url: `https://apigreendesert.onrender.com/user/one/${user.uid}`
+    //             }).then((res) => {
+    //                 console.log(res.data)
+    //                 setUser2(res.data)
+    //                 console.log(user2)
 
-        } else {
-            
-        }
-    });
+    //                 if(user2.role.id == 1){
+    //                     console.log('soy operador')
+    //                     setDisable(true)
+    //                 }else{
+    //                     console.log('soy admin')
+    //                     setDisable(false)
+    //                 }
+    //             })
+
+
+    //     } else {
+
+    //     }
+    // });
 
     const [user, setUser] = useState<customerModel[]>([])
     const navigate = useNavigate()
@@ -125,6 +125,11 @@ const Customerpage = () => {
                 console.log(customer)
                 setIdv(idv2)
 
+                formik2.values.name = customer.name
+                formik2.values.fristSurname = customer.fristSurname
+                formik2.values.secondSurname = customer.secondSurname
+                formik2.values.email = customer.email
+                formik2.values.phonenumber = customer.phonenumber
 
             }).catch((err) => { console.log(err) })
 
@@ -178,11 +183,6 @@ const Customerpage = () => {
 
         await setOpen2(true)
 
-        formik2.values.name = customer.name
-        formik2.values.fristSurname = customer.fristSurname
-        formik2.values.secondSurname = customer.secondSurname
-        formik2.values.email = customer.email
-        formik2.values.phonenumber = customer.phonenumber
         // formik.values.address = provider.address
         // formik.values.email = provider.email
         // formik.values.phonenumber = provider.phonenumber
@@ -195,9 +195,9 @@ const Customerpage = () => {
 
 
     const validationSchema2 = yup.object().shape({
-        name: yup.string().trim().required('El nombre es requerido'),
-        fristSurname: yup.string().trim().required('La compañia paterno es requerido'),
-        secondSurname: yup.string().trim().required('La direccion materno es requerido'),
+        name: yup.string().trim().required('El nombre es requerido').min(2, 'Tiene que tener minimo 2 caracteres'),
+        fristSurname: yup.string().trim().required('La compañia paterno es requerido').min(2, 'Tiene que tener minimo 2 caracteres'),
+        secondSurname: yup.string().trim().required('La direccion materno es requerido').min(2, 'Tiene que tener minimo 2 caracteres'),
         email: yup.string().trim().required('El email tiene que ser requerido').email('ingresa un email valido'),
         phonenumber: yup.string().trim().required('El telefono tiene que ser requerido').min(10, 'tiene que ser un minimo de 10 nuemros').max(10, 'tiene que tener un maximo de 10 numeros'),
 
@@ -250,6 +250,8 @@ const Customerpage = () => {
                     timer: 1500
                 })
                 resetForm()
+                handleClose2()
+                window.location.reload()
             })
                 .catch(err => console.log(err))
         }
@@ -288,7 +290,7 @@ const Customerpage = () => {
                             <TableCell>Apellido Materno</TableCell>
                             <TableCell>Email</TableCell>
                             <TableCell>Celular</TableCell>
-                            <TableCell>Status</TableCell>
+                            <TableCell>Estatus</TableCell>
                             <TableCell>Acciones</TableCell>
                         </TableRow>
 
@@ -306,22 +308,22 @@ const Customerpage = () => {
                                     <TableCell>{t.phonenumber}</TableCell>
                                     <TableCell>{`${t.status}`}</TableCell>
                                     <TableCell>
-                                        <Button color='success' disabled={disable} variant='outlined' onClick={async () => {
+                                        <Button color='success' variant='outlined' onClick={async () => {
                                             await getIdv5(t.id).then(async (res) => {
                                                 await handleOpen2()
 
                                             })
                                             console.log(t.id)
                                             console.log(idv);
-                                        }}>Edit</Button>
+                                        }}>Editar</Button>
 
 
-                                        &nbsp; <Button color='error' disabled={disable} variant="outlined" onClick={() => {
+                                        &nbsp; <Button color='error' variant="outlined" onClick={() => {
 
                                             getId(t.id)
 
                                             // axios.delete(`https://apigreendesert.onrender.com/employee/delete/${t.id}`).then((res)=>{console.log(res)}).catch((err)=>{console.log(err)})
-                                        }}>Deleted</Button>  &nbsp;
+                                        }}>Eliminar</Button>  &nbsp;
 
                                     </TableCell>
                                 </TableRow>
@@ -384,7 +386,7 @@ const Customerpage = () => {
 
 
                             <Grid item>
-                                <Button variant='contained' type='submit'>Actualizar Inventario</Button>
+                                <Button variant='contained' type='submit'>Actualizar cliente</Button>
                             </Grid>
                         </form>
                     </Box>

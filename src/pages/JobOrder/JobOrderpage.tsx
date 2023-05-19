@@ -40,55 +40,55 @@ const getId = (id: number): any => {
                     'Los datos han sido eliminados',
                     'success'
                 )
-                axios.delete(`https://apigreendesert.onrender.com/jobOrder/delete/${id}`).then((res) => { console.log(res) }).catch((err) => { console.log(err) })
+                axios.delete(`https://apigreendesert.onrender.com/jobOrder/delete/${id}`).then((res) => { console.log(res), window.location.reload() }).catch((err) => { console.log(err) })
             }
         })
     )
 }
 
 const JobOrderpage = () => {
-    
-    const [disable, setDisable] = useState(false)
-    const [uuid, setuuid] = useState<any>()
-    const auth = getAuth()
-    const [loading, setLoading] = useState(false)
-    const [user2, setUser2]= useState<any>({})
+
+    // const [disable, setDisable] = useState(false)
+    // const [uuid, setuuid] = useState<any>()
+    // const auth = getAuth()
+    // const [loading, setLoading] = useState(false)
+    // const [user2, setUser2]= useState<any>({})
 
 
-    useEffect(() => {
-        AuthCheck()
-    }, [auth])
+    // useEffect(() => {
+    //     AuthCheck()
+    // }, [auth])
 
-    const AuthCheck = onAuthStateChanged(auth, (user) => {
-        if (user) {
-             setuuid(user.uid) 
-            setLoading(false)
-            console.log(user.uid)
-            
-                axios({
-                    method: 'GET',
-                    url: `https://apigreendesert.onrender.com/user/one/${user.uid}`
-                }).then((res) => {
-                    console.log(res.data)
-                    setUser2(res.data)
-                    console.log(user2)
+    // const AuthCheck = onAuthStateChanged(auth, (user) => {
+    //     if (user) {
+    //          setuuid(user.uid) 
+    //         setLoading(false)
+    //         console.log(user.uid)
 
-                    if(user2.role.id == 1){
-                        console.log('soy operador')
-                        setDisable(true)
-                    }else{
-                        console.log('soy admin')
-                        setDisable(false)
-                    }
-                })
-            
+    //             axios({
+    //                 method: 'GET',
+    //                 url: `https://apigreendesert.onrender.com/user/one/${user.uid}`
+    //             }).then((res) => {
+    //                 console.log(res.data)
+    //                 setUser2(res.data)
+    //                 console.log(user2)
 
-        } else {
-            
-        }
-    });
+    //                 if(user2.role.id == 1){
+    //                     console.log('soy operador')
+    //                     setDisable(true)
+    //                 }else{
+    //                     console.log('soy admin')
+    //                     setDisable(false)
+    //                 }
+    //             })
 
-    
+
+    //     } else {
+
+    //     }
+    // });
+
+
     // useEffect(() =>{
     //     axios({
     //         method: 'GET',
@@ -116,6 +116,11 @@ const JobOrderpage = () => {
                 await setprovider(res.data)
                 console.log(provider)
                 setIdv(idv2)
+
+                formik.values.customer = provider.customer
+                formik.values.employee = provider.employee
+                formik.values.product = provider.product
+                formik.values.quantity = provider.quantity
 
             }).catch((err) => { console.log(err) })
 
@@ -164,10 +169,6 @@ const JobOrderpage = () => {
     const handleOpen = async () => {
 
         await setOpen(true)
-        formik.values.customer = provider.customer
-        formik.values.employee = provider.employee
-        formik.values.product = provider.product
-        formik.values.quantity = provider.quantity
 
     };
 
@@ -176,10 +177,10 @@ const JobOrderpage = () => {
 
 
     const validationSchema = yup.object().shape({
-        quantity: yup.number().required('La cantidad tiene que ser requerida').min(1, 'tiene que ser un minimo de 1 nuemros'),
-        customer: yup.number().required('La cantidad tiene que ser requerida').min(1, 'tiene que ser un minimo de 1 nuemros'),
-        employee: yup.number().required('La cantidad tiene que ser requerida').min(1, 'tiene que ser un minimo de 1 nuemros'),
-        product: yup.number().required('La cantidad tiene que ser requerida').min(1, 'tiene que ser un minimo de 1 nuemros'),
+        quantity: yup.number().positive().required('La cantidad tiene que ser requerida').min(1, 'tiene que ser un minimo de 1 nuemros'),
+        customer: yup.number().positive().required('El cliente tiene que ser requerido').min(1, 'tiene que ser un minimo de 1 nuemros'),
+        employee: yup.number().positive().required('El empleado tiene que ser requerido').min(1, 'tiene que ser un minimo de 1 nuemros'),
+        product: yup.number().positive().required('el producto tiene que ser requerido').min(1, 'tiene que ser un minimo de 1 nuemros'),
     });
 
 
@@ -230,6 +231,8 @@ const JobOrderpage = () => {
                     timer: 1500
                 })
                 resetForm()
+                handleClose()
+                window.location.reload()
             })
                 .catch(err => console.log(err))
         }
@@ -245,10 +248,10 @@ const JobOrderpage = () => {
         })
     }, [])
 
-    
+
     return (
         <div>
-            <Typography variant='h3' textAlign={'center'}>JobOrder Registrados</Typography>
+            <Typography variant='h3' textAlign={'center'}>Orden de Trabajo Registrados</Typography>
             <br />
 
             <TableContainer sx={{ textAlign: 'justify' }}>
@@ -257,11 +260,11 @@ const JobOrderpage = () => {
                         <TableRow>
                             <TableCell>#</TableCell>
                             <TableCell>Nombre</TableCell>
-                            <TableCell>cantidad</TableCell>
+                            <TableCell>Cantidad</TableCell>
                             <TableCell>Cliente</TableCell>
                             <TableCell>Empleado</TableCell>
-                            <TableCell>status</TableCell>
-                            <TableCell>Editar</TableCell>
+                            <TableCell>Estatus</TableCell>
+                            <TableCell>Acciones</TableCell>
                         </TableRow>
 
                     </TableHead>
@@ -277,22 +280,22 @@ const JobOrderpage = () => {
                                     <TableCell>{t.employee.name}</TableCell>
                                     <TableCell>{`${t.status}`}</TableCell>
                                     <TableCell>
-                                        <Button color='success' disabled={disable} variant='outlined' onClick={async () => {
+                                        <Button color='success' variant='outlined' onClick={async () => {
                                             await getIdv5(t.id).then(async (res) => {
                                                 await handleOpen()
 
                                             })
                                             console.log(t.id)
                                             console.log(idv);
-                                        }}>Edit</Button>
+                                        }}>Editar</Button>
 
 
-                                        &nbsp; <Button disabled={disable} color='error' variant="outlined" onClick={() => {
+                                        &nbsp; <Button color='error' variant="outlined" onClick={() => {
 
                                             getId(t.id)
 
                                             // axios.delete(`https://apigreendesert.onrender.com/employee/delete/${t.id}`).then((res)=>{console.log(res)}).catch((err)=>{console.log(err)})
-                                        }}>Deleted</Button>
+                                        }}>Eliminar</Button>
                                     </TableCell>
                                 </TableRow>
                             ))
@@ -344,7 +347,7 @@ const JobOrderpage = () => {
 
 
                             <Grid item>
-                                <Button disabled={disable} variant='contained' type='submit'>Actualizar proveedor</Button>
+                                <Button variant='contained' type='submit'>Actualizar Orden de trabajo</Button>
                             </Grid>
                         </form>
                     </Box>

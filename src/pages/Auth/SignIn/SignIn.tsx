@@ -11,7 +11,7 @@ import { Toldbar } from '../../../Common/layout/toldbar';
 import { Color } from '../../../Theme/Colors/Color';
 import Swal from 'sweetalert2';
 
-
+export let uuid2: any
 
 export const SignIn = () => {
 
@@ -47,7 +47,10 @@ export const SignIn = () => {
   //Functions
   const validationSchema = yup.object().shape({
     email: yup.string().trim().required('Ingrese un email.').email('ingresa un email valido'),
-    password: yup.string().trim().required('Ingrese una contraseña').min(8, 'Debe de contener al menos 8 caracteres').uppercase('Debe contener una mayuscula')
+    password: yup.string().trim().required('Ingrese una contraseña').matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
+      "Debe contener minimo 8 caracteres, uno en mayúscula, uno en minúscula, un número y un carácter de caso especial"
+    ),
   });
 
   const formik = useFormik<loginModel>({
@@ -58,6 +61,7 @@ export const SignIn = () => {
     validationSchema: validationSchema,
     onSubmit: async(values) => {
        await signInWithEmailAndPassword(auth, values.email, values.password).then((res) =>{
+        uuid2=res.user.uid
         splashNotification('nelson');
         
         navigate('/home')

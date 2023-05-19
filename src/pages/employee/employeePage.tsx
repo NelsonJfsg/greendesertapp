@@ -9,15 +9,19 @@ import { employeeModel } from '../../assets/models/employee.model'
 import * as yup from 'yup'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { Directory } from '../../Common/dictionary/routeDirectory'
-
-let idTest : number
-let idt:number
-
-let idTest2 : number
+import { uuid } from '../../services/auth/AuthRouter'
+import { WindowSharp } from '@mui/icons-material'
+import { uuid2 } from '../Auth/SignIn/SignIn'
 
 
+let idTest: number
+let idt: number
 
-const getId = (id : number):any  => {
+let idTest2: number
+
+
+
+const getId = (id: number): any => {
   return (
     Swal.fire({
       title: '¿Seguro que quieres eliminar?',
@@ -34,8 +38,8 @@ const getId = (id : number):any  => {
           'Eliminado',
           'Los datos han sido eliminados',
           'success'
-          )
-          axios.delete(`https://apigreendesert.onrender.com/employee/delete/${id}`).then((res)=>{console.log(res)}).catch((err)=>{console.log(err)})
+        )
+        axios.delete(`https://apigreendesert.onrender.com/employee/delete/${id}`).then((res) => { console.log(res), window.location.reload() }).catch((err) => { console.log(err) })
       }
     })
   )
@@ -50,69 +54,100 @@ const refreshScreen = () : void => {
 
 
 export const EmployeePage = () => {
-  const [disable, setDisable] = useState(false)
-    const [uuid, setuuid] = useState<any>()
-    const auth = getAuth()
-    const [loading, setLoading] = useState(false)
-    const [user2, setUser2]= useState<any>({})
+  // const auth = getAuth()
+  const [disable, setDisable] = useState(true)
+  // const [uuid, setuuid] = useState<any>()
+  // const [loading, setLoading] = useState(false)
+  const [user2, setUser2] = useState<any>({})
 
 
-    useEffect(() => {
-        AuthCheck()
-    }, [auth])
+  //   useEffect(() => {
+  //       AuthCheck()
+  //   }, [])
 
-    const AuthCheck = onAuthStateChanged(auth, (user) => {
-        if (user) {
-             setuuid(user.uid) 
-            setLoading(false)
-            console.log(user.uid)
-            
-                axios({
-                    method: 'GET',
-                    url: `https://apigreendesert.onrender.com/user/one/${user.uid}`
-                }).then((res) => {
-                    console.log(res.data)
-                    setUser2(res.data)
-                    console.log(user2)
+  // const AuthCheck = onAuthStateChanged(auth, (user) => {
 
-                    if(user2.role.id == 1){
-                        console.log('soy operador')
-                        setDisable(true)
-                    }else{
-                        console.log('soy admin')
-                        setDisable(false)
-                    }
-                })
-            
+  //   if (user) {
+  //     setuuid(user.uid)
+  //     setLoading(false)
+  //     console.log(user.uid)
 
-        } else {
-            
-        }
-    });
+
+
+
+  //   }
+  // });
   
-  const [user, setUser] = useState<userModel[]>([])
-  const navigate= useNavigate()
-  const [idv, setIdv] = useState({
-    id:0
-  })
-  const getIdv5 = async (idv2 : any):Promise<any>  => {
-    return (
 
+  useEffect(() => {
+    axios({
+      method: 'GET',
+      url: `https://apigreendesert.onrender.com/user/one/${uuid}`
+    }).then((res) => {
+      console.log(res.data)
+      setUser2(res.data)
+      console.log(user2)
+
+      if (user2.role.id == 1) {
+        console.log('soy admin')
+        setDisable(false)
+      } else {
+        console.log('soy operador')
+        setDisable(true)
+      }
+    })
+  }, [])
+
+
+  const handleac = () => {
+    axios({
+      method: 'GET',
+      url: `https://apigreendesert.onrender.com/user/one/${uuid}`
+    }).then((res) => {
+      console.log(res.data)
+      setUser2(res.data)
+      console.log(user2)
+
+      if (user2.role.id == 1) {
+        console.log('soy admin')
+        setDisable(false)
+      } else {
+        console.log('soy operador')
+        setDisable(true)
+      }
+    })
+  }
+
+  const [user, setUser] = useState<userModel[]>([])
+  const navigate = useNavigate()
+  const [idv, setIdv] = useState({
+    id: 0
+  })
+  const getIdv5 = async (idv2: any): Promise<any> => {
+    return (
       await axios({
         method: 'GET',
         url: `https://apigreendesert.onrender.com/employee/${idv2}`
-      }).then(async(res) => {
+      }).then((res) => {
         console.log("x" + res)
-  
-        await setEmployee(res.data)
+
+        setEmployee(res.data)
         console.log(employee)
         setIdv(idv2)
-        
-  
+
+        formik.values.name = employee.name
+        formik.values.fristSurname = employee.fristSurname
+        formik.values.secondSurname = employee.secondSurname
+        formik.values.birthday = employee.birthday
+        formik.values.email = employee.email
+        formik.values.password = employee.user.password
+        formik.values.phonenumber = employee.phonenumber
+
       }).catch((err) => { console.log(err) })
-  
-      
-    )}
+
+
+    )
+  }
   // edit
   const [employee, setEmployee] = useState<employeeModel>({
     name: '',
@@ -156,16 +191,9 @@ export const EmployeePage = () => {
   };
 
   const [open, setOpen] = useState(false);
-  const handleOpen = async() => {
-    
+  const handleOpen = async () => {
+
     await setOpen(true)
-    formik.values.name = employee.name
-    formik.values.fristSurname = employee.fristSurname
-    formik.values.secondSurname = employee.secondSurname
-    formik.values.birthday = employee.birthday
-    formik.values.email = employee.email
-    formik.values.password = employee.password
-    formik.values.phonenumber = employee.phonenumber
   };
   const handleClose = () => setOpen(false);
 
@@ -174,13 +202,16 @@ export const EmployeePage = () => {
     name: yup.string().trim().required('El nombre es requerido'),
     fristSurname: yup.string().trim().required('El apellido paterno es requerido'),
     secondSurname: yup.string().trim().required('El apellido materno es requerido'),
-    birthday: yup.string().trim().required('La fecha tiene que ser requerida'),
+    birthday: yup.date().max(new Date(Date.now() - 567648000000), "Debes tener al menos 18 años.").required('La fecha tiene que ser requerida'),
     email: yup.string().trim().required('El email tiene que ser requerido').email('ingresa un email valido'),
     phonenumber: yup.string().trim().required('El telefono tiene que ser requerido').min(10, 'tiene que ser un minimo de 10 nuemros').max(10, 'tiene que tener un maximo de 10 numeros'),
-    password: yup.string().trim().required('La contraseña tiene que ser requerida').min(6, 'tiene que ser un minimo de 6 nuemros'),
+    password: yup.string().trim().required('La contraseña tiene que ser requerida').matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
+      "Debe contener minimo 8 caracteres, uno en mayúscula, uno en minúscula, un número y un carácter de caso especial"
+    ),
 
   });
- 
+
 
   const formik = useFormik<employeeModel>({
     initialValues: {
@@ -222,7 +253,8 @@ export const EmployeePage = () => {
         headers: {
           'Content-Type': 'application/json'
         }
-      }).then(res => {console.log(res.data)
+      }).then(res => {
+        console.log(res.data)
         Swal.fire({
           position: 'top-end',
           icon: 'success',
@@ -230,149 +262,154 @@ export const EmployeePage = () => {
           showConfirmButton: false,
           timer: 1500
         })
+        handleClose()
+        window.location.reload()
+        
       })
         .catch(err => console.log(err))
     }
   })
-// end edit
-   useEffect(()=>{
+  // end edit
+  useEffect(() => {
     axios({
-      method:'GET',
-      url:'https://apigreendesert.onrender.com/user/all'
-    }).then((res) =>{
+      method: 'GET',
+      url: 'https://apigreendesert.onrender.com/user/all'
+    }).then((res) => {
       console.log(res.data)
       setUser(res.data)
     })
-   },[])
+  }, [])
   return (
     <>
-  <Typography variant='h3' textAlign={'center'}> Empleados Registrados</Typography>
-  <br />
-      <Grid container columnSpacing={{xs:1, sm:2 , md:3}}>
-         <TableContainer>
-            <Table>
-            <TableHead> 
-                <TableRow>
-                    <TableCell>#</TableCell>
-                    <TableCell>email</TableCell>
-                    <TableCell>status</TableCell>
-                    <TableCell>role</TableCell>
-                    <TableCell>Nombre</TableCell>
-                    <TableCell>Apellido Paterno</TableCell>
-                    <TableCell>Apellido Materno</TableCell>
-                    <TableCell>Fecha de Nacimiento</TableCell>
-                    <TableCell>Telefono Celular</TableCell>
-                    <TableCell>Editar</TableCell>
-                </TableRow>
+      <Typography variant='h3' textAlign={'center'}> Empleados Registrados</Typography>
+      <br />
+      <Button color='error' variant="outlined" onClick={handleac}>actualizar</Button>
+      <Grid container columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>#</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Estatus</TableCell>
+                <TableCell>roles</TableCell>
+                <TableCell>Nombre</TableCell>
+                <TableCell>Apellido Paterno</TableCell>
+                <TableCell>Apellido Materno</TableCell>
+                <TableCell>Fecha de Nacimiento</TableCell>
+                <TableCell>Telefono Celular</TableCell>
+                <TableCell>Acciones</TableCell>
+              </TableRow>
 
             </TableHead>
             <TableBody>
 
-            {
-                        user.map((t:any, index) =>(
-                          <TableRow key={t.id}>
-                             <TableCell key={t.id}>{index +1}</TableCell>
-                            <TableCell >{t.email}</TableCell>
-                            <TableCell >{t.status}</TableCell>
-                            <TableCell >{t.role.name}</TableCell>
-                            <TableCell >{t.employee.name}</TableCell>
-                            <TableCell >{t.employee.fristSurname}</TableCell>
-                            <TableCell >{t.employee.secondSurname}</TableCell>
-                            <TableCell >{t.employee.birthday}</TableCell>
-                            <TableCell >{t.employee.phonenumber}</TableCell>
-                            
-                            <TableCell>
-                              <Button color='success' disabled={disable} variant='outlined'  onClick={async()=>{
-                                await getIdv5(t.id).then(async(res)=>{
-                                 await handleOpen()
+              {
+                user.map((t: any, index) => (
+                  <TableRow key={t.id}>
+                    <TableCell key={t.id}>{index + 1}</TableCell>
+                    <TableCell >{t.email}</TableCell>
+                    <TableCell >{`${t.status}`}</TableCell>
+                    <TableCell >{t.role.name}</TableCell>
+                    <TableCell >{t.employee.name}</TableCell>
+                    <TableCell >{t.employee.fristSurname}</TableCell>
+                    <TableCell >{t.employee.secondSurname}</TableCell>
+                    <TableCell >{t.employee.birthday}</TableCell>
+                    <TableCell >{t.employee.phonenumber}</TableCell>
 
-                                })
-                                console.log(t.id)
-                                console.log(idv);
-                              }}>Edit</Button>
-                              
+                    <TableCell>
+                      <Button color='success' disabled={disable} variant='outlined' onClick={async () => {
+                        await getIdv5(t.id).then(async (res) => {
 
-                              &nbsp; <Button color='error' disabled={disable} variant="outlined" onClick={()=>{
+                          await handleOpen()
 
-                              getId(t.id)
+                        })
+                        console.log(t.id)
+                        // console.log(idv);
+                      }}>Editar</Button>
 
-                              // axios.delete(`https://apigreendesert.onrender.com/employee/delete/${t.id}`).then((res)=>{console.log(res)}).catch((err)=>{console.log(err)})
-                            }}>Deleted</Button></TableCell>
-                            
-                          </TableRow>
-                        ))
-                      }
-                <TableRow>
-                      
-                </TableRow>
+
+                      &nbsp; <Button color='error' disabled={disable} variant="outlined" onClick={() => {
+
+                        getId(t.id)
+
+                        // axios.delete(`https://apigreendesert.onrender.com/employee/delete/${t.id}`).then((res)=>{console.log(res)}).catch((err)=>{console.log(err)})
+                      }}>Eliminar</Button></TableCell>
+
+                  </TableRow>
+                ))
+              }
+              <TableRow>
+
+              </TableRow>
             </TableBody>
-            </Table>
+          </Table>
         </TableContainer>
       </Grid>
 
       <>
-            <Modal
-              open={open}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <Box sx={style}>
-                <Button onClick={handleClose}>X</Button>
-                <form onSubmit={formik.handleSubmit}>
-                  <Typography variant='h6'>Nombre</Typography>
-                  <TextField name='name'
-                    value={formik.values.name}
-                    onChange={formik.handleChange}
-                    error={formik.touched.name && Boolean(formik.errors.name)}
-                    helperText={formik.touched.name && formik.errors.name} />
-                  <br />
+        <Modal
+          open={open}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Button onClick={handleClose}>X</Button>
+            <form onSubmit={formik.handleSubmit}>
+              <Typography variant='h6'>Nombre</Typography>
+              <TextField name='name'
+                value={formik.values.name}
+                onChange={formik.handleChange}
+                error={formik.touched.name && Boolean(formik.errors.name)}
+                helperText={formik.touched.name && formik.errors.name} />
+              <br />
 
-                  <Typography variant='h6'>Apellido paterno</Typography>
-                  <TextField name='fristSurname'
-                    value={formik.values.fristSurname}
-                    onChange={formik.handleChange}
-                    error={formik.touched.fristSurname && Boolean(formik.errors.fristSurname)}
-                    helperText={formik.touched.fristSurname && formik.errors.fristSurname} />
-                  <br />
-                  <Typography variant='h6'>Apellido materno</Typography>
-                  <TextField name='secondSurname'
-                    value={formik.values.secondSurname}
-                    onChange={formik.handleChange}
-                    error={formik.touched.secondSurname && Boolean(formik.errors.secondSurname)}
-                    helperText={formik.touched.secondSurname && formik.errors.secondSurname} />
-                  <br />
-                  <Typography variant='h6'>Fecha de nacimiento</Typography>
-                  <TextField name='birthday' type='date'
-                    value={formik.values.birthday}
-                    onChange={formik.handleChange}
-                    error={formik.touched.birthday && Boolean(formik.errors.birthday)}
-                    helperText={formik.touched.birthday && formik.errors.birthday} />
-                  <br />
-                  <Typography variant='h6'>Correo electronico</Typography>
-                  <TextField name='email'
-                    value={formik.values.email}
-                    onChange={formik.handleChange}
-                    error={formik.touched.email && Boolean(formik.errors.email)}
-                    helperText={formik.touched.email && formik.errors.email} />
-                  <br />
-                  <Typography variant='h6'>Contraseña</Typography>
-                  <TextField name="password"
-                    type='password'
-                    value={formik.values.password}
-                    onChange={formik.handleChange}
-                    error={formik.touched.password && Boolean(formik.errors.password)}
-                    helperText={formik.touched.password && formik.errors.password} />
-                  <br />
-                  <Typography variant='h6'>numero celular</Typography>
-                  <TextField name='phonenumber'
-                    value={formik.values.phonenumber}
-                    onChange={formik.handleChange}
-                    error={formik.touched.phonenumber && Boolean(formik.errors.phonenumber)}
-                    helperText={formik.touched.phonenumber && formik.errors.phonenumber} />
+              <Typography variant='h6'>Apellido paterno</Typography>
+              <TextField name='fristSurname'
+                value={formik.values.fristSurname}
+                onChange={formik.handleChange}
+                error={formik.touched.fristSurname && Boolean(formik.errors.fristSurname)}
+                helperText={formik.touched.fristSurname && formik.errors.fristSurname} />
+              <br />
+              <Typography variant='h6'>Apellido materno</Typography>
+              <TextField name='secondSurname'
+                value={formik.values.secondSurname}
+                onChange={formik.handleChange}
+                error={formik.touched.secondSurname && Boolean(formik.errors.secondSurname)}
+                helperText={formik.touched.secondSurname && formik.errors.secondSurname} />
+              <br />
+              <Typography variant='h6'>Fecha de nacimiento</Typography>
+              <TextField name='birthday' type='date'
+                value={formik.values.birthday}
+                onChange={formik.handleChange}
+                error={formik.touched.birthday && Boolean(formik.errors.birthday)}
+                helperText={formik.touched.birthday && formik.errors.birthday} />
+              <br />
+              <Typography variant='h6'>Correo electronico</Typography>
+              <TextField name='email'
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                error={formik.touched.email && Boolean(formik.errors.email)}
+                helperText={formik.touched.email && formik.errors.email} />
+              <br />
+              <Typography variant='h6'>Contraseña</Typography>
+              <TextField name="password"
+                type='password'
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                error={formik.touched.password && Boolean(formik.errors.password)}
+                helperText={formik.touched.password && formik.errors.password} />
+              <br />
+              <Typography variant='h6'>numero celular</Typography>
+              <TextField name='phonenumber'
+                value={formik.values.phonenumber}
+                onChange={formik.handleChange}
+                error={formik.touched.phonenumber && Boolean(formik.errors.phonenumber)}
+                helperText={formik.touched.phonenumber && formik.errors.phonenumber} />
 
 
                   <Grid item>
-                    <Button variant='contained' onClick={() => {refreshScreen()}} type='submit'>Actualizar empleado</Button>
+                    <Button variant='contained' type='submit'>Actualizar empleado</Button>
                   </Grid>
                 </form>
               </Box>
