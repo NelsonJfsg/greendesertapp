@@ -21,6 +21,8 @@ export const EmployeeRoutes = () => {
       
       <Routes>
         <Route path='/add' element={<AddEmployePage/>}/>
+        <Route path='/' element={<AddEmployePage/>}/>
+        
 
         <Route path='/*' element={<Navigate to='add'/>}/>
         

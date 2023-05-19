@@ -8,6 +8,7 @@ import { useFormik } from 'formik'
 import { employeeModel } from '../../assets/models/employee.model'
 import * as yup from 'yup'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { Directory } from '../../Common/dictionary/routeDirectory'
 
 let idTest : number
 let idt:number
@@ -41,7 +42,9 @@ const getId = (id : number):any  => {
 }
 
 
-
+const refreshScreen = () : void => {
+  window.location.href = Directory.reviewEmployee;
+}
 
 
 
@@ -369,7 +372,7 @@ export const EmployeePage = () => {
 
 
                   <Grid item>
-                    <Button variant='contained' type='submit'>Actualizar empleado</Button>
+                    <Button variant='contained' onClick={() => {refreshScreen()}} type='submit'>Actualizar empleado</Button>
                   </Grid>
                 </form>
               </Box>
