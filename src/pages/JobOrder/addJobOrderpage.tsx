@@ -12,45 +12,45 @@ import { IProvider } from '../../assets/models/provider.model'
 import { Ijobordermodel } from '../../assets/models/joborder.model'
 
 export const AddJobOrderpage = () => {
-  const [disable, setDisable] = useState(false)
-  const [uuid, setuuid] = useState<any>()
-  const auth = getAuth()
-  const [loading, setLoading] = useState(false)
-  const [user2, setUser2]= useState<any>({})
+  // const [disable, setDisable] = useState(false)
+  // const [uuid, setuuid] = useState<any>()
+  // const auth = getAuth()
+  // const [loading, setLoading] = useState(false)
+  // const [user2, setUser2]= useState<any>({})
 
 
-  useEffect(() => {
-      AuthCheck()
-  }, [auth])
+  // useEffect(() => {
+  //     AuthCheck()
+  // }, [auth])
 
-  const AuthCheck = onAuthStateChanged(auth, (user) => {
-      if (user) {
-           setuuid(user.uid) 
-          setLoading(false)
-          console.log(user.uid)
+  // const AuthCheck = onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //          setuuid(user.uid) 
+  //         setLoading(false)
+  //         console.log(user.uid)
           
-              axios({
-                  method: 'GET',
-                  url: `https://apigreendesert.onrender.com/user/one/${user.uid}`
-              }).then((res) => {
-                  console.log(res.data)
-                  setUser2(res.data)
-                  console.log(user2)
+  //             axios({
+  //                 method: 'GET',
+  //                 url: `https://apigreendesert.onrender.com/user/one/${user.uid}`
+  //             }).then((res) => {
+  //                 console.log(res.data)
+  //                 setUser2(res.data)
+  //                 console.log(user2)
 
-                  if(user2.role.id == 1){
-                      console.log('soy operador')
-                      setDisable(true)
-                  }else{
-                      console.log('soy admin')
-                      setDisable(false)
-                  }
-              })
+  //                 if(user2.role.id == 1){
+  //                     console.log('soy operador')
+  //                     setDisable(true)
+  //                 }else{
+  //                     console.log('soy admin')
+  //                     setDisable(false)
+  //                 }
+  //             })
           
 
-      } else {
+  //     } else {
           
-      }
-  });
+  //     }
+  // });
 
   // const[employee, setEmployee] = useState<employeeModel>({
   //     name: '',
@@ -118,10 +118,10 @@ export const AddJobOrderpage = () => {
   */}
 
   const validationSchema = yup.object().shape({
-    quantity: yup.number().required('La cantidad tiene que ser requerida').min(1, 'tiene que ser un minimo de 1 nuemros'),
-    customer: yup.number().required('La cantidad tiene que ser requerida').min(1, 'tiene que ser un minimo de 1 nuemros'),
-    employee: yup.number().required('La cantidad tiene que ser requerida').min(1, 'tiene que ser un minimo de 1 nuemros'),
-    product: yup.number().required('La cantidad tiene que ser requerida').min(1, 'tiene que ser un minimo de 1 nuemros'),
+    quantity: yup.number().positive().required('La cantidad tiene que ser requerida').min(1, 'tiene que ser un minimo de 1 nuemros'),
+    customer: yup.number().positive().required('El cliente tiene que ser requerido').min(1, 'tiene que ser un minimo de 1 nuemros'),
+    employee: yup.number().positive().required('El empleado tiene que ser requerido').min(1, 'tiene que ser un minimo de 1 nuemros'),
+    product: yup.number().positive().required('el producto tiene que ser requerido').min(1, 'tiene que ser un minimo de 1 nuemros'),
   });
 
   const formik = useFormik<Ijobordermodel>({
@@ -211,7 +211,7 @@ export const AddJobOrderpage = () => {
       <Grid container
         direction={'column'}
         alignItems='center'>
-        <Typography variant='h2'>Registrar JobOrder</Typography>
+        <Typography variant='h2'>Registrar Orden de trabajo</Typography>
       </Grid>
 
       <Grid container
@@ -271,7 +271,7 @@ export const AddJobOrderpage = () => {
 
 
             <Grid item>
-              <Button disabled={disable} variant='contained' type='submit'>Registrar joborder</Button>
+              <Button  variant='contained' type='submit'>Registrar Orden de trabajo</Button>
             </Grid>
           </form>
         </Grid>

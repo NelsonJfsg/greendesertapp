@@ -37,51 +37,51 @@ const getId = (id: number): any => {
                     'Los datos han sido eliminados',
                     'success'
                 )
-                axios.delete(`https://apigreendesert.onrender.com/provider/delete/${id}`).then((res) => { console.log(res) }).catch((err) => { console.log(err) })
+                axios.delete(`https://apigreendesert.onrender.com/provider/delete/${id}`).then((res) => { console.log(res), window.location.reload() }).catch((err) => { console.log(err) })
             }
         })
     )
 }
 const Proveedorespage = () => {
-    const [disable, setDisable] = useState(false)
-    const [uuid, setuuid] = useState<any>()
-    const auth = getAuth()
-    const [loading, setLoading] = useState(false)
-    const [user2, setUser2]= useState<any>({})
+    // const [disable, setDisable] = useState(false)
+    // const [uuid, setuuid] = useState<any>()
+    // const auth = getAuth()
+    // const [loading, setLoading] = useState(false)
+    // const [user2, setUser2]= useState<any>({})
 
 
-    useEffect(() => {
-        AuthCheck()
-    }, [auth])
+    // useEffect(() => {
+    //     AuthCheck()
+    // }, [auth])
 
-    const AuthCheck = onAuthStateChanged(auth, (user) => {
-        if (user) {
-             setuuid(user.uid) 
-            setLoading(false)
-            console.log(user.uid)
-            
-                axios({
-                    method: 'GET',
-                    url: `https://apigreendesert.onrender.com/user/one/${user.uid}`
-                }).then((res) => {
-                    console.log(res.data)
-                    setUser2(res.data)
-                    console.log(user2)
+    // const AuthCheck = onAuthStateChanged(auth, (user) => {
+    //     if (user) {
+    //          setuuid(user.uid) 
+    //         setLoading(false)
+    //         console.log(user.uid)
 
-                    if(user2.role.id == 1){
-                        console.log('soy operador')
-                        setDisable(true)
-                    }else{
-                        console.log('soy admin')
-                        setDisable(false)
-                    }
-                })
-            
+    //             axios({
+    //                 method: 'GET',
+    //                 url: `https://apigreendesert.onrender.com/user/one/${user.uid}`
+    //             }).then((res) => {
+    //                 console.log(res.data)
+    //                 setUser2(res.data)
+    //                 console.log(user2)
 
-        } else {
-            
-        }
-    });
+    //                 if(user2.role.id == 1){
+    //                     console.log('soy operador')
+    //                     setDisable(true)
+    //                 }else{
+    //                     console.log('soy admin')
+    //                     setDisable(false)
+    //                 }
+    //             })
+
+
+    //     } else {
+
+    //     }
+    // });
 
     const [user, setUser] = useState<IProvider[]>([])
     const navigate = useNavigate()
@@ -100,7 +100,12 @@ const Proveedorespage = () => {
                 await setprovider(res.data)
                 console.log(provider)
                 setIdv(idv2)
-                await { handleOpen }
+
+                formik.values.name = provider.name
+                formik.values.company = provider.company
+                formik.values.address = provider.address
+                formik.values.email = provider.email
+                formik.values.phonenumber = provider.phonenumber
 
             }).catch((err) => { console.log(err) })
 
@@ -161,17 +166,12 @@ const Proveedorespage = () => {
         boxShadow: 24,
         p: 4,
     };
-    const [idprovedor, setIdProvedor]=useState();
+    const [idprovedor, setIdProvedor] = useState();
     const [open, setOpen] = useState(false);
     const [open2, setOpen2] = useState(false);
     const handleOpen = async () => {
 
         await setOpen(true)
-        formik.values.name = provider.name
-        formik.values.company = provider.company
-        formik.values.address = provider.address
-        formik.values.email = provider.email
-        formik.values.phonenumber = provider.phonenumber
     };
 
     const handleOpen2 = async (idv2: any): Promise<any> => {
@@ -191,18 +191,19 @@ const Proveedorespage = () => {
 
 
     const validationSchema = yup.object().shape({
-        name: yup.string().trim().required('El nombre es requerido'),
-        company: yup.string().trim().required('La compañia paterno es requerido'),
-        address: yup.string().trim().required('La direccion materno es requerido'),
+        name: yup.string().trim().required('El nombre es requerido').min(5, ' tiene que tener un minimo de 5 caracteres').max(255, 'solo se pueden 255 caracteres'),
+        company: yup.string().trim().required('La compañia paterno es requerido').min(3, ' tiene que tener un minimo de 3 caracteres').max(255, 'solo se pueden 255 caracteres'),
+        address: yup.string().trim().required('La direccion materno es requerido').min(30, ' tiene que tener un minimo de 30 caracteres').max(255, 'solo se pueden 255 caracteres'),
         email: yup.string().trim().required('El email tiene que ser requerido').email('ingresa un email valido'),
         phonenumber: yup.string().trim().required('El telefono tiene que ser requerido').min(10, 'tiene que ser un minimo de 10 nuemros').max(10, 'tiene que tener un maximo de 10 numeros'),
     });
 
     const validationSchema2 = yup.object().shape({
-        name: yup.string().trim().required('Nombre del producto es requerido'),
-        description: yup.string().trim().required('La descripcion es requerida'),
-        brand: yup.string().trim().required('La brand es requerida'),
-       
+        name: yup.string().trim().required('Nombre del producto es requerido').min(5, ' tiene que tener un minimo de 5 caracteres').max(255, 'solo se pueden 255 caracteres'),
+        description: yup.string().trim().required('La descripcion es requerida').min(5, ' tiene que tener un minimo de 5 caracteres').max(255, 'solo se pueden 255 caracteres'),
+        brand: yup.string().trim().required('La brand es requerida').min(4, ' tiene que tener un minimo de 4 caracteres').max(255, 'solo se pueden 255 caracteres'),
+        quantity: yup.string().trim().required('La cantidad tiene que ser requerida').min(1, 'tiene que ser un minimo de 1 nuemros'),
+
     });
 
     const formik2 = useFormik<IProduct>({
@@ -230,13 +231,13 @@ const Proveedorespage = () => {
                     quantity: values.inventory.quantity,
                     spot: values.inventory.spot,
                 },
-                provider:idprovedor
+                provider: idprovedor
             }
             console.log(newProduct)
             //axios.put(`https://apigreendesert.onrender.com/employee/update/${params.id}`, {newEmployee}).then((res)=>{console.log(res.status)}).catch((err)=>{console.log(err)})
 
             await axios({
-                method:'POST',
+                method: 'POST',
                 url: `https://apigreendesert.onrender.com/product`,
                 data: JSON.stringify(newProduct),
                 headers: {
@@ -328,6 +329,9 @@ const Proveedorespage = () => {
                     timer: 1500
                 })
                 resetForm()
+                handleClose()
+                
+                window.location.reload()
             })
                 .catch(err => console.log(err))
         }
@@ -346,67 +350,67 @@ const Proveedorespage = () => {
         <div>
             <Typography variant='h3' textAlign={'center'}>Proveedores Registrados</Typography>
             <br />
-            
-            <TableContainer  sx={{textAlign:'justify'}}>
+
+            <TableContainer sx={{ textAlign: 'justify' }}>
                 <Table>
-                <TableHead >
-                    <TableRow>
-                        <TableCell>#</TableCell>
-                        <TableCell>Nombre</TableCell>
-                        <TableCell>compañia</TableCell>
-                        <TableCell>direccionr</TableCell>
-                        <TableCell>email</TableCell>
-                        <TableCell>celular</TableCell>
-                        <TableCell>status</TableCell>
-                        <TableCell>nombre del producto</TableCell>
-                        <TableCell>Editar</TableCell>
-                    </TableRow>
+                    <TableHead >
+                        <TableRow>
+                            <TableCell>#</TableCell>
+                            <TableCell>Nombre</TableCell>
+                            <TableCell>compañia</TableCell>
+                            <TableCell>Direccion</TableCell>
+                            <TableCell>Email</TableCell>
+                            <TableCell>Celular</TableCell>
+                            <TableCell>Estatus</TableCell>
+                            <TableCell>Nombre del producto</TableCell>
+                            <TableCell>Acciones</TableCell>
+                        </TableRow>
 
-                </TableHead>
-                <TableBody>
-                    
-                    {
-                        user.map((t: any, index) => (
-                            <TableRow key={t.id}>
-                                <TableCell key={t.id}>{index +1}</TableCell>
-                                <TableCell>{t.name}</TableCell>
-                                <TableCell>{t.company}</TableCell>
-                                <TableCell>{t.address}</TableCell>
-                                <TableCell>{t.email}</TableCell>
-                                <TableCell>{t.phonenumber}</TableCell>
-                                <TableCell>{`${t.status}`}</TableCell>
-                                <TableCell>{JSON.stringify(`${t.product.name}`)}</TableCell>
-                                <TableCell>
-                                    <Button color='success' disabled={disable} variant='outlined' onClick={async () => {
-                                        await getIdv5(t.id).then(async (res) => {
-                                            await handleOpen()
+                    </TableHead>
+                    <TableBody>
 
-                                        })
-                                        console.log(t.id)
-                                        console.log(idv);
-                                    }}>Edit</Button>
+                        {
+                            user.map((t: any, index) => (
+                                <TableRow key={t.id}>
+                                    <TableCell key={t.id}>{index + 1}</TableCell>
+                                    <TableCell>{t.name}</TableCell>
+                                    <TableCell>{t.company}</TableCell>
+                                    <TableCell>{t.address}</TableCell>
+                                    <TableCell>{t.email}</TableCell>
+                                    <TableCell>{t.phonenumber}</TableCell>
+                                    <TableCell>{`${t.status}`}</TableCell>
+                                    <TableCell>{JSON.stringify(`${t.product.name}`)}</TableCell>
+                                    <TableCell>
+                                        <Button color='success' variant='outlined' onClick={async () => {
+                                            await getIdv5(t.id).then(async (res) => {
+                                                await handleOpen()
+
+                                            })
+                                            console.log(t.id)
+                                            console.log(idv);
+                                        }}>Editar</Button>
 
 
-                                    &nbsp; <Button color='error'disabled={disable} variant="outlined" onClick={() => {
+                                        &nbsp; <Button color='error' variant="outlined" onClick={() => {
 
-                                        getId(t.id)
+                                            getId(t.id)
 
-                                        // axios.delete(`https://apigreendesert.onrender.com/employee/delete/${t.id}`).then((res)=>{console.log(res)}).catch((err)=>{console.log(err)})
-                                    }}>Deleted</Button>  &nbsp;
-                                    <Button color='success' disabled={disable} variant='outlined' onClick={async () => {
-                                        // await getIdv5(t.id).then(async (res) => {
+                                            // axios.delete(`https://apigreendesert.onrender.com/employee/delete/${t.id}`).then((res)=>{console.log(res)}).catch((err)=>{console.log(err)})
+                                        }}>Eliminar</Button>  &nbsp;
+                                        <Button color='success' variant='outlined' onClick={async () => {
+                                            // await getIdv5(t.id).then(async (res) => {
 
-                                        // })
-                                        await handleOpen2(t.id)
-                                        console.log(t.id)
-                                        console.log(idv);
-                                    }}>agregar producto</Button>
-                                </TableCell>
-                            </TableRow>
-                        ))
-                    }
+                                            // })
+                                            await handleOpen2(t.id)
+                                            console.log(t.id)
+                                            console.log(idv);
+                                        }}>Agregar producto</Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        }
 
-                </TableBody>
+                    </TableBody>
                 </Table>
             </TableContainer>
 

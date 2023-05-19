@@ -116,13 +116,16 @@ export const AddEmployePage = () => {
   */}
 
   const validationSchema = yup.object().shape({
-      name: yup.string().trim().required('El nombre es requerido'),
-      fristSurname: yup.string().trim().required('El apellido paterno es requerido'),
-      secondSurname: yup.string().trim().required('El apellido materno es requerido'),
-      birthday: yup.string().trim().required('La fecha tiene que ser requerida'),
+      name: yup.string().trim().required('El nombre es requerido').min(2,'Tiene que tener minimo dos letras'),
+      fristSurname: yup.string().trim().required('El apellido paterno es requerido').min(2,'Tiene que tener minimo dos letras'),
+      secondSurname: yup.string().trim().required('El apellido materno es requerido').min(2,'Tiene que tener minimo dos letras'),
+      birthday: yup.date().max(new Date(Date.now() - 567648000000), "Debes tener al menos 18 años.").required('La fecha tiene que ser requerida'),
       email: yup.string().trim().required('El email tiene que ser requerido').email('ingresa un email valido'),
       phonenumber: yup.string().trim().required('El telefono tiene que ser requerido').min(10,'tiene que ser un minimo de 10 nuemros').max(10, 'tiene que tener un maximo de 10 numeros'),
-      password: yup.string().trim().required('La contraseña tiene que ser requerida').min(6,'tiene que ser un minimo de 6 nuemros'),
+      password: yup.string().trim().required('La contraseña tiene que ser requerida').matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
+        "Debe contener minimo 8 caracteres, uno en mayúscula, uno en minúscula, un número y un carácter de caso especial"
+      ),
       
   });
 
@@ -156,12 +159,12 @@ export const AddEmployePage = () => {
           phonenumber: values.phonenumber,
           status: true,
           user: {
-            uuid:'',
+            uuid:res.user.uid,
             password: values.password,
             role: 2
           }
         }
-        newEmployee.user.uuid = res.user.uid
+        
         Swal.fire({
           position: 'top-end',
           icon: 'success',

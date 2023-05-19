@@ -11,45 +11,45 @@ import Swal from 'sweetalert2'
 import { IProvider } from '../../assets/models/provider.model'
 
 export const AddProveedorespage = () => {
-  const [disable, setDisable] = useState(false)
-    const [uuid, setuuid] = useState<any>()
-    const auth = getAuth()
-    const [loading, setLoading] = useState(false)
-    const [user2, setUser2]= useState<any>({})
+  // const [disable, setDisable] = useState(false)
+  //   const [uuid, setuuid] = useState<any>()
+  //   const auth = getAuth()
+  //   const [loading, setLoading] = useState(false)
+  //   const [user2, setUser2]= useState<any>({})
 
 
-    useEffect(() => {
-        AuthCheck()
-    }, [auth])
+  //   useEffect(() => {
+  //       AuthCheck()
+  //   }, [auth])
 
-    const AuthCheck = onAuthStateChanged(auth, (user) => {
-        if (user) {
-             setuuid(user.uid) 
-            setLoading(false)
-            console.log(user.uid)
+  //   const AuthCheck = onAuthStateChanged(auth, (user) => {
+  //       if (user) {
+  //            setuuid(user.uid) 
+  //           setLoading(false)
+  //           console.log(user.uid)
             
-                axios({
-                    method: 'GET',
-                    url: `https://apigreendesert.onrender.com/user/one/${user.uid}`
-                }).then((res) => {
-                    console.log(res.data)
-                    setUser2(res.data)
-                    console.log(user2)
+  //               axios({
+  //                   method: 'GET',
+  //                   url: `https://apigreendesert.onrender.com/user/one/${user.uid}`
+  //               }).then((res) => {
+  //                   console.log(res.data)
+  //                   setUser2(res.data)
+  //                   console.log(user2)
 
-                    if(user2.role.id == 1){
-                        console.log('soy operador')
-                        setDisable(true)
-                    }else{
-                        console.log('soy admin')
-                        setDisable(false)
-                    }
-                })
+  //                   if(user2.role.id == 1){
+  //                       console.log('soy operador')
+  //                       setDisable(true)
+  //                   }else{
+  //                       console.log('soy admin')
+  //                       setDisable(false)
+  //                   }
+  //               })
             
 
-        } else {
+  //       } else {
             
-        }
-    });
+  //       }
+  //   });
   // const[employee, setEmployee] = useState<employeeModel>({
   //     name: '',
   //     fristSurname: '',
@@ -116,14 +116,14 @@ export const AddProveedorespage = () => {
   */}
 
   const validationSchema = yup.object().shape({
-      name: yup.string().trim().required('El nombre es requerido'),
-      company: yup.string().trim().required('La compañia paterno es requerido'),
-      address: yup.string().trim().required('La direccion materno es requerido'),
+      name: yup.string().trim().required('El nombre es requerido').min(5, ' tiene que tener un minimo de 5 caracteres').max(255, 'solo se pueden 255 caracteres'),
+      company: yup.string().trim().required('La compañia paterno es requerido').min(3, ' tiene que tener un minimo de 3 caracteres').max(255, 'solo se pueden 255 caracteres'),
+      address: yup.string().trim().required('La direccion materno es requerido').min(30, ' tiene que tener un minimo de 30 caracteres').max(255, 'solo se pueden 255 caracteres'),
       email: yup.string().trim().required('El email tiene que ser requerido').email('ingresa un email valido'),
       phonenumber: yup.string().trim().required('El telefono tiene que ser requerido').min(10,'tiene que ser un minimo de 10 nuemros').max(10, 'tiene que tener un maximo de 10 numeros'),
-      nameproduct: yup.string().trim().required('Nombre del producto es requerido'),
-      description: yup.string().trim().required('La descripcion es requerida'),
-      brand: yup.string().trim().required('La brand es requerida'),
+      nameproduct: yup.string().trim().required('Nombre del producto es requerido').min(5, ' tiene que tener un minimo de 5 caracteres').max(255, 'solo se pueden 255 caracteres'),
+      description: yup.string().trim().required('La descripcion es requerida').min(5, ' tiene que tener un minimo de 5 caracteres').max(255, 'solo se pueden 255 caracteres'),
+      brand: yup.string().trim().required('La brand es requerida').min(4, ' tiene que tener un minimo de 4 caracteres').max(255, 'solo se pueden 255 caracteres'),
       quantity: yup.string().trim().required('La cantidad tiene que ser requerida').min(1,'tiene que ser un minimo de 1 nuemros'),
       
   });
@@ -308,13 +308,6 @@ export const AddProveedorespage = () => {
             error={formik.touched.brand && Boolean(formik.errors.brand)}
             helperText={formik.touched.brand && formik.errors.brand}/>
             <br />
-            <Typography variant='h6'>imagen</Typography>
-            <TextField  name="image" type='file'
-            value={formik.values.image}
-            onChange={formik.handleChange}
-            error={formik.touched.image && Boolean(formik.errors.image)}
-            helperText={formik.touched.image && formik.errors.image}/>
-            <br />
             <Typography variant='h6'>cantidad</Typography>
             <TextField  name="quantity" 
             value={formik.values.quantity}
@@ -333,7 +326,7 @@ export const AddProveedorespage = () => {
 
             
           <Grid item>
-            <Button variant='contained' disabled={disable} type='submit'>Registrar proveedor</Button>
+            <Button variant='contained'  type='submit'>Registrar proveedor</Button>
           </Grid>
         </form>
       </Grid>

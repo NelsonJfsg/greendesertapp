@@ -19,7 +19,7 @@ let idTest: number
 let idt: number
 
 let idTest2: number
-debugger
+
 let uid = uuid
 
 // 
@@ -63,51 +63,51 @@ const getId = (id: number): any => {
                     'Los datos han sido eliminados',
                     'success'
                 )
-                axios.delete(`https://apigreendesert.onrender.com/inventory/delete/${id}`).then((res) => { console.log(res) }).catch((err) => { console.log(err) })
+                axios.delete(`https://apigreendesert.onrender.com/inventory/delete/${id}`).then((res) => { console.log(res), window.location.reload() }).catch((err) => { console.log(err) })
             }
         })
     )
 }
 const Inventoriypage = () => {
-    const [disable, setDisable] = useState(false)
-    const [uuid, setuuid] = useState<any>()
-    const auth = getAuth()
-    const [loading, setLoading] = useState(false)
-    const [user2, setUser2]= useState<any>({})
+    // const [disable, setDisable] = useState(false)
+    // const [uuid, setuuid] = useState<any>()
+    // const auth = getAuth()
+    // const [loading, setLoading] = useState(false)
+    // const [user2, setUser2]= useState<any>({})
 
 
-    useEffect(() => {
-        AuthCheck()
-    }, [auth])
+    // useEffect(() => {
+    //     AuthCheck()
+    // }, [auth])
 
-    const AuthCheck = onAuthStateChanged(auth, (user) => {
-        if (user) {
-             setuuid(user.uid) 
-            setLoading(false)
-            console.log(user.uid)
-            
-                axios({
-                    method: 'GET',
-                    url: `https://apigreendesert.onrender.com/user/one/${user.uid}`
-                }).then((res) => {
-                    console.log(res.data)
-                    setUser2(res.data)
-                    console.log(user2)
+    // const AuthCheck = onAuthStateChanged(auth, (user) => {
+    //     if (user) {
+    //          setuuid(user.uid) 
+    //         setLoading(false)
+    //         console.log(user.uid)
 
-                    if(user2.role.id == 1){
-                        console.log('soy operador')
-                        setDisable(true)
-                    }else{
-                        console.log('soy admin')
-                        setDisable(false)
-                    }
-                })
-            
+    //             axios({
+    //                 method: 'GET',
+    //                 url: `https://apigreendesert.onrender.com/user/one/${user.uid}`
+    //             }).then((res) => {
+    //                 console.log(res.data)
+    //                 setUser2(res.data)
+    //                 console.log(user2)
 
-        } else {
-            
-        }
-    });
+    //                 if(user2.role.id == 1){
+    //                     console.log('soy operador')
+    //                     setDisable(true)
+    //                 }else{
+    //                     console.log('soy admin')
+    //                     setDisable(false)
+    //                 }
+    //             })
+
+
+    //     } else {
+
+    //     }
+    // });
 
     const [user, setUser] = useState<IInventory[]>([])
     const navigate = useNavigate()
@@ -126,7 +126,10 @@ const Inventoriypage = () => {
                 await setInventory(res.data)
                 console.log(inventory)
                 setIdv(idv2)
-                
+
+                formik2.values.quantity = inventory.quantity
+                formik2.values.spot = inventory.spot
+
 
             }).catch((err) => { console.log(err) })
 
@@ -135,12 +138,12 @@ const Inventoriypage = () => {
     }
     // edit
     const [inventory, setInventory] = useState<IInventory>({
-        
 
-                quantity: 0,
-                spot: '',
-            
-        
+
+        quantity: 0,
+        spot: '',
+
+
     })
     useEffect(() => {
 
@@ -167,41 +170,41 @@ const Inventoriypage = () => {
         boxShadow: 24,
         p: 4,
     };
-    const [idprovedor, setIdProvedor]=useState();
- 
+    const [idprovedor, setIdProvedor] = useState();
+
     const [open2, setOpen2] = useState(false);
-   
+
 
     const handleOpen2 = async () => {
 
         await setOpen2(true)
-       
+
         formik2.values.quantity = inventory.quantity
         formik2.values.spot = inventory.spot
         // formik.values.address = provider.address
         // formik.values.email = provider.email
         // formik.values.phonenumber = provider.phonenumber
     };
- 
+
     const handleClose2 = () => setOpen2(false);
 
 
 
-   
+
 
     const validationSchema2 = yup.object().shape({
-        quantity: yup.number().required('La cantidad del producto es requerida').min(1, 'el minimo tiene que ser 1'),
-        spot: yup.string().trim().required('La descripcion es requerida'),
-        
-       
+        quantity: yup.number().positive().required('La cantidad del producto es requerida').min(1, 'el minimo tiene que ser 1'),
+        spot: yup.string().trim().required('La descripcion es requerida').min(10, 'Tiene que tener minimo 10 caracteres'),
+
+
     });
 
     const formik2 = useFormik<IInventory>({
         initialValues: {
-            
-                quantity: 0,
-                spot: '',
-            
+
+            quantity: 0,
+            spot: '',
+
 
         },
         validationSchema: validationSchema2,
@@ -209,9 +212,9 @@ const Inventoriypage = () => {
             //alert(JSON.stringify(values, null, 2));
 
             const newInventory = {
-                    quantity: values.quantity,
-                    spot: values.spot,
-                
+                quantity: values.quantity,
+                spot: values.spot,
+
             }
             console.log(newInventory)
             //axios.put(`https://apigreendesert.onrender.com/employee/update/${params.id}`, {newEmployee}).then((res)=>{console.log(res.status)}).catch((err)=>{console.log(err)})
@@ -233,11 +236,13 @@ const Inventoriypage = () => {
                     timer: 1500
                 })
                 resetForm()
+                handleClose2()
+                window.location.reload()
             })
                 .catch(err => console.log(err))
         }
     })
-    
+
     // end edit
     useEffect(() => {
         axios({
@@ -250,72 +255,72 @@ const Inventoriypage = () => {
             axios({
                 method: 'GET',
                 url: `https://apigreendesert.onrender.com/user/one${uid}`
-            }).then((res)=>{
+            }).then((res) => {
                 console.log(res.data)
             })
         })
     }, [])
 
     const [id, setId] = useState({})
-const handelid=()=>{
-    setId(uid)
-    console.log(id)
-}
+    const handelid = () => {
+        setId(uid)
+        console.log(id)
+    }
     return (
         <div>
             <Typography variant='h3' textAlign={'center'}>Inventario Registrados</Typography>
             <br />
-            
-            <TableContainer  sx={{textAlign:'justify'}}>
+
+            <TableContainer sx={{ textAlign: 'justify' }}>
                 <Table>
-                <TableHead >
-                    <TableRow>
-                        <TableCell>#</TableCell>
-                        <TableCell>Cantida</TableCell>
-                        <TableCell>Spot</TableCell>
-                        <TableCell>Nombre del producto</TableCell>
-                       
-                        <TableCell>Editar</TableCell>
-                    </TableRow>
+                    <TableHead >
+                        <TableRow>
+                            <TableCell>#</TableCell>
+                            <TableCell>Cantida</TableCell>
+                            <TableCell>Lugar</TableCell>
+                            <TableCell>Nombre del producto</TableCell>
 
-                </TableHead>
-                <TableBody>
+                            <TableCell>Acciones</TableCell>
+                        </TableRow>
 
-                    {
-                        user.map((t: any, index) => (
-                            <TableRow key={t.id}>
-                                <TableCell key={t.id}>{index}</TableCell>
-                                <TableCell>{t.quantity}</TableCell>
-                                <TableCell>{t.spot}</TableCell>
-                                <TableCell>{t.product.name}</TableCell>
-                                <TableCell>
-                                    <Button color='success' disabled={disable} variant='outlined' onClick={async () => {
-                                        await getIdv5(t.id).then(async (res) => {
-                                            await handleOpen2()
+                    </TableHead>
+                    <TableBody>
 
-                                        })
-                                        console.log(t.id)
-                                        console.log(idv);
-                                    }}>Edit</Button>
+                        {
+                            user.map((t: any, index) => (
+                                <TableRow key={t.id}>
+                                    <TableCell key={t.id}>{index}</TableCell>
+                                    <TableCell>{t.quantity}</TableCell>
+                                    <TableCell>{t.spot}</TableCell>
+                                    <TableCell>{t.product.name}</TableCell>
+                                    <TableCell>
+                                        <Button color='success' variant='outlined' onClick={async () => {
+                                            await getIdv5(t.id).then(async (res) => {
+                                                await handleOpen2()
+
+                                            })
+                                            console.log(t.id)
+                                            console.log(idv);
+                                        }}>Editar</Button>
 
 
-                                    &nbsp; <Button color='error' disabled={disable} variant="outlined" onClick={() => {
+                                        &nbsp; <Button color='error' variant="outlined" onClick={() => {
 
-                                        getId(t.id)
+                                            getId(t.id)
 
-                                        // axios.delete(`https://apigreendesert.onrender.com/employee/delete/${t.id}`).then((res)=>{console.log(res)}).catch((err)=>{console.log(err)})
-                                    }}>Deleted</Button>  &nbsp;
-                                    
-                                </TableCell>
-                            </TableRow>
-                        ))
-                    }
+                                            // axios.delete(`https://apigreendesert.onrender.com/employee/delete/${t.id}`).then((res)=>{console.log(res)}).catch((err)=>{console.log(err)})
+                                        }}>Deleted</Button>  &nbsp;
 
-                </TableBody>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        }
+
+                    </TableBody>
                 </Table>
             </TableContainer>
 
-           
+
 
 
             <>

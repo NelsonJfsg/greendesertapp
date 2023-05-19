@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {getAuth, onAuthStateChanged} from 'firebase/auth'
+import {beforeAuthStateChanged, getAuth, onAuthStateChanged} from 'firebase/auth'
 import { useNavigate } from 'react-router-dom';
 export let uuid :any
 export interface IAuthRouterProps {};
