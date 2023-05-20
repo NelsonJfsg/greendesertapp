@@ -11,7 +11,7 @@ import { IProvider } from '../../assets/models/provider.model'
 import { IProduct } from '../../assets/models/product.model'
 import { Ijobordermodel } from '../../assets/models/joborder.model'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
-import { uuid } from '../../services/auth/AuthRouter'
+import { email, uuid } from '../../services/auth/AuthRouter'
 
 
 let idTest: number
@@ -19,6 +19,8 @@ let idt: number
 
 let idTest2: number
 
+let cantidad: number
+let idinventarioid: any
 
 
 const getId = (id: number): any => {
@@ -47,6 +49,52 @@ const getId = (id: number): any => {
 }
 
 const JobOrderpage = () => {
+    const [disable, setDisable] = useState(true)
+    const [disable2, setDisable2] = useState(true)
+    // const [uuid, setuuid] = useState<any>()
+    // const [loading, setLoading] = useState(false)
+    const [user2, setUser2] = useState<any>({})
+
+    useEffect(() => {
+        axios({
+            method: 'GET',
+            url: `https://apigreendesert.onrender.com/user/one/${uuid}`
+        }).then((res) => {
+            console.log(res.data)
+            setUser2(res.data)
+            console.log(user2)
+
+            if (user2.role.id == 1) {
+                console.log('soy admin')
+                setDisable(false)
+            } else {
+                console.log('soy operador')
+                setDisable(true)
+            }
+        })
+    }, [])
+
+
+    const handleac = () => {
+        axios({
+            method: 'GET',
+            url: `https://apigreendesert.onrender.com/user/one/${uuid}`
+        }).then((res) => {
+            console.log(res.data)
+            setUser2(res.data)
+            console.log(user2)
+
+            if (user2.role.id == 1 ||  provider.employee.email == user2.email) {
+                console.log('soy admin')
+                setDisable(false)
+                setDisable2(false)
+            } else if(user2.role.id == 2 && provider.employee.email == email){
+                console.log('soy operador')
+                setDisable(true)
+                setDisable2(false)
+            }
+        })
+    }
 
     // const [disable, setDisable] = useState(false)
     // const [uuid, setuuid] = useState<any>()
@@ -127,16 +175,74 @@ const JobOrderpage = () => {
 
         )
     }
+
+    const getIdv6 = async (idv3: any, idinventory: any): Promise<any> => {
+        return (
+
+            await axios({
+                method: 'GET',
+                url: `https://apigreendesert.onrender.com/jobOrder/${idv3}`
+            }).then(async (res) => {
+                console.log("x" + res.data.inventory)
+
+                await setprovider(res.data)
+                console.log(provider)
+                setIdv(idv3)
+                for (let item of provider.inventory) {
+
+                    cantidad = item.quantity - provider.quantity
+                    console.log(cantidad)
+                    idinventarioid = item.id
+
+                }
+                const newinventory = {
+
+                    quantity: cantidad,
+
+                }
+                console.log()
+                await axios({
+                    method: 'PUT',
+                    url: `https://apigreendesert.onrender.com/inventory/update/${idinventarioid}`,
+                    data: JSON.stringify(newinventory),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then((res) => { console.log(res) }).catch((err) => { console.log(err) })
+                formik.values.customer = provider.customer
+                formik.values.employee = provider.employee
+                formik.values.product = provider.product
+                formik.values.quantity = provider.quantity
+
+            }).catch((err) => { console.log(err) })
+
+
+        )
+    }
     // edit
     const [provider, setprovider] = useState<Ijobordermodel>({
         quantity: 0,
         customer: 0,
-        employee: 0,
+        employee: {
+            name: '',
+            fristSurname: '',
+            secondSurname: '',
+            birthday: '',
+            email: '',
+            phonenumber: '',
+            password: '',
+            user: {
+                uuid: '',
+                email: '',
+                password: '',
+                role: 2,
+            },
+        },
         status: true,
-        inventory: {
+        inventory: [{
             quantity: 0,
             spot: '',
-        },
+        }],
         product: 0,
     })
     useEffect(() => {
@@ -188,12 +294,26 @@ const JobOrderpage = () => {
         initialValues: {
             quantity: 0,
             customer: 0,
-            employee: 0,
+            employee: {
+                name: '',
+                fristSurname: '',
+                secondSurname: '',
+                birthday: '',
+                email: '',
+                phonenumber: '',
+                password: '',
+                user: {
+                    uuid: '',
+                    email: '',
+                    password: '',
+                    role: 2,
+                },
+            },
             status: true,
-            inventory: {
+            inventory: [{
                 quantity: 0,
                 spot: '',
-            },
+            }],
             product: 0,
         },
         validationSchema: validationSchema,
@@ -206,7 +326,7 @@ const JobOrderpage = () => {
                 status: true,
                 inventory: {
                     quantity: values.quantity,
-                    spot: values.inventory.quantity,
+                    spot: 'values.inventory.quantity',
                 },
                 product: values.product
             }
@@ -265,6 +385,10 @@ const JobOrderpage = () => {
                             <TableCell>Empleado</TableCell>
                             <TableCell>Estatus</TableCell>
                             <TableCell>Acciones</TableCell>
+                            <TableCell>
+                              <Button color='info' variant="outlined" onClick={handleac}>Comprobar Estado</Button>
+
+                            </TableCell>
                         </TableRow>
 
                     </TableHead>
@@ -278,9 +402,18 @@ const JobOrderpage = () => {
                                     <TableCell>{t.quantity}</TableCell>
                                     <TableCell>{t.customer.name}</TableCell>
                                     <TableCell>{t.employee.name}</TableCell>
-                                    <TableCell>{`${t.status}`}</TableCell>
+                                    <TableCell >{`${t.status}`}</TableCell>
                                     <TableCell>
-                                        <Button color='success' variant='outlined' onClick={async () => {
+                                    <Button color='info' disabled={disable2} variant='outlined' onClick={async () => {
+                                            await getIdv6(t.id, t.inventory.id).then(async (res) => {
+
+
+                                            })
+                                            console.log(t.id)
+                                            console.log(t.inventory)
+                                            console.log(idv);
+                                        }}>Terminar Tarea</Button>&nbsp;
+                                        <Button color='success'disabled={disable} variant='outlined' onClick={async () => {
                                             await getIdv5(t.id).then(async (res) => {
                                                 await handleOpen()
 
@@ -289,8 +422,10 @@ const JobOrderpage = () => {
                                             console.log(idv);
                                         }}>Editar</Button>
 
+                                        
 
-                                        &nbsp; <Button color='error' variant="outlined" onClick={() => {
+
+                                        &nbsp; <Button color='error'disabled={disable} variant="outlined" onClick={() => {
 
                                             getId(t.id)
 
@@ -331,16 +466,16 @@ const JobOrderpage = () => {
                             <br />
                             <Typography variant='h6'>Empleado</Typography>
                             <TextField name="employee" type='number'
-                                value={formik.values.employee}
+                                value={formik.values.employee.id}
                                 onChange={formik.handleChange}
-                                error={formik.touched.employee && Boolean(formik.errors.employee)}
-                                helperText={formik.touched.employee && formik.errors.employee} />
+                                error={formik.touched.employee?.id && Boolean(formik.errors.employee?.id)}
+                                helperText={formik.touched.employee?.id && formik.errors.employee?.id} />
                             <br />
                             <Typography variant='h6'>Inventario</Typography>
                             <TextField name="product" type='number'
                                 value={formik.values.product}
                                 onChange={formik.handleChange}
-                                error={formik.touched.inventory?.product && Boolean(formik.errors.product)}
+                                error={formik.touched.product && Boolean(formik.errors.product)}
                                 helperText={formik.touched.product && formik.errors.product} />
                             <br />
 

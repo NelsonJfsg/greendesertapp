@@ -10,8 +10,72 @@ import { useFormik } from 'formik'
 import Swal from 'sweetalert2'
 import { IProvider } from '../../assets/models/provider.model'
 import { Ijobordermodel } from '../../assets/models/joborder.model'
+import { uuid } from '../../services/auth/AuthRouter'
 
 export const AddJobOrderpage = () => {
+  // const auth = getAuth()
+  const [disable, setDisable] = useState(true)
+  // const [uuid, setuuid] = useState<any>()
+  // const [loading, setLoading] = useState(false)
+  const [user2, setUser2] = useState<any>({})
+
+
+  //   useEffect(() => {
+  //       AuthCheck()
+  //   }, [])
+
+  // const AuthCheck = onAuthStateChanged(auth, (user) => {
+
+  //   if (user) {
+  //     setuuid(user.uid)
+  //     setLoading(false)
+  //     console.log(user.uid)
+
+
+
+
+  //   }
+  // });
+  
+
+  useEffect(() => {
+    axios({
+      method: 'GET',
+      url: `https://apigreendesert.onrender.com/user/one/${uuid}`
+    }).then((res) => {
+      console.log(res.data)
+      setUser2(res.data)
+      console.log(user2)
+
+      if (user2.role.id == 1) {
+        console.log('soy admin')
+        setDisable(false)
+      } else {
+        console.log('soy operador')
+        setDisable(true)
+      }
+    })
+  }, [])
+
+
+  const handleac = () => {
+    axios({
+      method: 'GET',
+      url: `https://apigreendesert.onrender.com/user/one/${uuid}`
+    }).then((res) => {
+      console.log(res.data)
+      setUser2(res.data)
+      console.log(user2)
+
+      if (user2.role.id == 1) {
+        console.log('soy admin')
+        setDisable(false)
+      } else {
+        console.log('soy operador')
+        setDisable(true)
+      }
+    })
+  }
   // const [disable, setDisable] = useState(false)
   // const [uuid, setuuid] = useState<any>()
   // const auth = getAuth()
@@ -128,12 +192,26 @@ export const AddJobOrderpage = () => {
     initialValues: {
       quantity: 0,
       customer: 0,
-      employee: 0,
+      employee: {
+        name: '',
+        fristSurname: '',
+        secondSurname: '',
+        birthday: '',
+        email: '',
+        phonenumber: '',
+        password: '',
+        user: {
+            uuid: '',
+            email: '',
+            password: '',
+            role: 2,
+        },
+    },
       status: true,
-      inventory: {
+      inventory:[ {
         quantity: 0,
         spot: '',
-      },
+      }],
       product: 0,
     },
     validationSchema: validationSchema,
@@ -144,10 +222,10 @@ export const AddJobOrderpage = () => {
         customer: values.customer,
         employee: values.employee,
         status: true,
-        inventory: {
+        inventory: [{
           quantity: values.quantity,
-          spot: values.inventory.quantity,
-        },
+          spot: values.inventory,
+        }],
         product: values.product
       }
 
@@ -237,6 +315,7 @@ export const AddJobOrderpage = () => {
           direction='column'
           alignContent='center'
           textAlign='center'>
+        <Button color='info' variant="outlined" onClick={handleac}>Comprobar Estado</Button>
 
           <form onSubmit={formik.handleSubmit}>
             
@@ -256,22 +335,22 @@ export const AddJobOrderpage = () => {
             <br />
             <Typography variant='h6'>Empleado</Typography>
             <TextField name="employee" type='number'
-              value={formik.values.employee}
+              value={formik.values.employee?.id}
               onChange={formik.handleChange}
-              error={formik.touched.employee && Boolean(formik.errors.employee)}
-              helperText={formik.touched.employee && formik.errors.employee} />
+              error={formik.touched.employee?.id && Boolean(formik.errors.employee?.id)}
+              helperText={formik.touched.employee?.id && formik.errors.employee?.id} />
             <br />
             <Typography variant='h6'>Inventario</Typography>
             <TextField name="product" type='number'
               value={formik.values.product}
               onChange={formik.handleChange}
-              error={formik.touched.inventory?.product && Boolean(formik.errors.product)}
+              error={formik.touched.product && Boolean(formik.errors.product)}
               helperText={formik.touched.product && formik.errors.product} />
             <br />
 
 
             <Grid item>
-              <Button  variant='contained' type='submit'>Registrar Orden de trabajo</Button>
+              <Button  variant='contained' disabled={disable} type='submit'>Registrar Orden de trabajo</Button>
             </Grid>
           </form>
         </Grid>

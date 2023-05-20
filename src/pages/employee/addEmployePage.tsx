@@ -8,9 +8,73 @@ import axios from 'axios'
 import * as yup from 'yup'
 import { useFormik } from 'formik'
 import Swal from 'sweetalert2'
+import { uuid } from '../../services/auth/AuthRouter'
 
 export const AddEmployePage = () => {
-  // const [disable, setDisable] = useState(false)
+    // const auth = getAuth()
+    const [disable, setDisable] = useState(true)
+    // const [uuid, setuuid] = useState<any>()
+    // const [loading, setLoading] = useState(false)
+    const [user2, setUser2] = useState<any>({})
+  
+  
+    //   useEffect(() => {
+    //       AuthCheck()
+    //   }, [])
+  
+    // const AuthCheck = onAuthStateChanged(auth, (user) => {
+  
+    //   if (user) {
+    //     setuuid(user.uid)
+    //     setLoading(false)
+    //     console.log(user.uid)
+  
+  
+  
+  
+    //   }
+    // });
+    
+  
+    useEffect(() => {
+      axios({
+        method: 'GET',
+        url: `https://apigreendesert.onrender.com/user/one/${uuid}`
+      }).then((res) => {
+        console.log(res.data)
+        setUser2(res.data)
+        console.log(user2)
+  
+        if (user2.role.id == 1) {
+          console.log('soy admin')
+          setDisable(false)
+        } else {
+          console.log('soy operador')
+          setDisable(true)
+        }
+      })
+    }, [])
+  
+  
+    const handleac = () => {
+      axios({
+        method: 'GET',
+        url: `https://apigreendesert.onrender.com/user/one/${uuid}`
+      }).then((res) => {
+        console.log(res.data)
+        setUser2(res.data)
+        console.log(user2)
+  
+        if (user2.role.id == 1) {
+          console.log('soy admin')
+          setDisable(false)
+        } else {
+          console.log('soy operador')
+          setDisable(true)
+        }
+      })
+    }
+  
   //   const [uuid, setuuid] = useState<any>()
    const auth = getAuth()
   //   const [loading, setLoading] = useState(false)
@@ -219,6 +283,7 @@ export const AddEmployePage = () => {
         direction='column'
         alignContent='center'
         textAlign='center'>
+        <Button color='info' variant="outlined" onClick={handleac}>Comprobar Estado</Button>
 
         <form onSubmit={formik.handleSubmit}>
           <Typography variant='h6'>Nombre</Typography>
@@ -274,7 +339,7 @@ export const AddEmployePage = () => {
 
             
           <Grid item>
-            <Button variant='contained' type='submit'>Registrar empleado</Button>
+            <Button variant='contained'disabled={disable} type='submit'>Registrar empleado</Button>
           </Grid>
         </form>
       </Grid>
