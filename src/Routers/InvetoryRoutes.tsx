@@ -1,6 +1,6 @@
 import { Box, Toolbar } from '@mui/material'
 import React from 'react'
-import { Route, Router, Routes } from 'react-router-dom'
+import { Navigate, Route, Router, Routes } from 'react-router-dom'
 import { Navbar, SideBar } from '../Common/layout'
 import { AddEmployePage } from '../pages/employee/addEmployePage'
 import Addinvetorypage from '../pages/Inventory/addinvetorypage'
@@ -20,7 +20,9 @@ export const InvetoryRoutes = () => {
       
       <Routes>
       <Route path='/add' element={<Addinvetorypage/>}/>
-      <Route path='/' element={<Inventoriypage/>}/>
+      <Route path='/review' element={<Inventoriypage/>}/>
+
+      <Route path='/*' element={<Navigate to='review'/>}/>
     </Routes>
   
 
