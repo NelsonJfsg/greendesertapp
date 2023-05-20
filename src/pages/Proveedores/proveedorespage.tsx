@@ -18,7 +18,7 @@ let idt: number
 
 let idTest2: number
 
-
+debugger
 
 const getId = (id: number): any => {
     return (
@@ -436,7 +436,7 @@ const Proveedorespage = () => {
 
                     </TableHead>
                     <TableBody>
-
+                            
                         {
                             user.map((t: any, index) => (
                                 <TableRow key={t.id}>
@@ -447,7 +447,7 @@ const Proveedorespage = () => {
                                     <TableCell>{t.email}</TableCell>
                                     <TableCell>{t.phonenumber}</TableCell>
                                     <TableCell>{`${t.status}`}</TableCell>
-                                    <TableCell>{JSON.stringify(`${t.product.name}`)}</TableCell>
+                                    <TableCell>{`${t.product[index].name}`} {`${t.product[index+1].name}`}</TableCell>
                                     <TableCell>
                                         <Button color='success'disabled={disable} variant='outlined' onClick={async () => {
                                             await getIdv5(t.id).then(async (res) => {
