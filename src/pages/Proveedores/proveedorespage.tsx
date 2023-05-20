@@ -569,13 +569,6 @@ const Proveedorespage = () => {
                                 error={formik2.touched.brand && Boolean(formik2.errors.brand)}
                                 helperText={formik2.touched.brand && formik2.errors.brand} />
                             <br />
-                            <Typography variant='h6'>imagen</Typography>
-                            <TextField name='image' type='file'
-                                value={formik2.values.image}
-                                onChange={formik2.handleChange}
-                                error={formik2.touched.image && Boolean(formik2.errors.image)}
-                                helperText={formik2.touched.image && formik2.errors.image} />
-                            <br />
                             <Typography variant='h6'>cantidad</Typography>
                             <TextField name='inventory.quantity'
                                 value={formik2.values.inventory.quantity}
