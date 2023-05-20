@@ -329,7 +329,6 @@ const Productpage = () => {
                                     <TableCell>{t.name}</TableCell>
                                     <TableCell>{t.description}</TableCell>
                                     <TableCell>{t.brand}</TableCell>
-                                    <TableCell>{t.image}</TableCell>
                                     <TableCell>{t.provider.name}</TableCell>
                                     <TableCell>
                                         <Button color='success'disabled={disable} variant='outlined' onClick={async () => {
