@@ -20,7 +20,7 @@ export const RouterApp = () => {
       <Route path='/*' element={ <AppRoutes/>}/>
       <Route path='/auth/*' element={<AuthRouter2><AuthRoutes/></AuthRouter2>}/>
       <Route path='/employee/*' element={<AuthRouter><EmployeeRoutes/></AuthRouter>} />
-      <Route path='/invetory/*' element={<AuthRouter><InvetoryRoutes/></AuthRouter>} />
+      <Route path='/inventory/*' element={<AuthRouter><InvetoryRoutes/></AuthRouter>} />
       <Route path='/Proveedores/*' element={<AuthRouter><ProveedoresRoutes/></AuthRouter>} />
       <Route path='/Productos/*' element={<AuthRouter><ProductRoutes/></AuthRouter>} />
       <Route path='/Customer/*' element={<AuthRouter><CustomerRoute/></AuthRouter>} />

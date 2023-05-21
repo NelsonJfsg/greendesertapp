@@ -107,6 +107,8 @@ export const SideBar = ({drawerWidth = 340}) => {
                     </ListItem>
                   </ListItemButton>
 
+                  
+
                   <ListItemButton onClick={() => {Directory.reviewInventory}}>
                     <ListItem sx={{ml: 2}}>
                       <Inventory/>
