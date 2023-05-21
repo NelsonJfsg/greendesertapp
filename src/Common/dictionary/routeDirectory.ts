@@ -11,7 +11,7 @@ export class Directory  {
   
   //Inventory
   static addInventory : string = this.rootURL + 'inventory/add';
-  static reviewInventory : string = this.rootURL + 'invetory/review';
+  static reviewInventory : string = this.rootURL + 'inventory/review';
 
   //Proveedores
   static addProvider : string = this.rootURL + 'proveedores/add'
