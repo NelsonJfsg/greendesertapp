@@ -19,10 +19,10 @@ export const InvetoryRoutes = () => {
       <Toolbar/>
       
       <Routes>
-      <Route path='/add' element={<Addinvetorypage/>}/>
-      <Route path='/review' element={<Inventoriypage/>}/>
+        <Route path='/add' element={<Addinvetorypage/>}/>
+        <Route path='/review' element={<Inventoriypage/>}/>
 
-      <Route path='/*' element={<Navigate to='review'/>}/>
+        <Route path='/*' element={<Navigate to='review'/>}/>
     </Routes>
   
 
