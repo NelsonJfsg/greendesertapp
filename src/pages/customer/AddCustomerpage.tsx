@@ -128,7 +128,7 @@ export const AddCustomerpage = () => {
   //     user: {}
 
   // })
-  const url = 'http://localhost:3000/user'
+  const url = 'https://apigreendesert.onrender.com//user'
   // const handleimputChange = ({target:{name, value}}:any) =>{
 
   //    console.log(evt.currentTarget.value)
@@ -152,7 +152,7 @@ export const AddCustomerpage = () => {
   //   }
   //   await axios({
   //     method:'POST',
-  //     url:'http://localhost:3000/employee',
+  //     url:'https://apigreendesert.onrender.com//employee',
   //     data:JSON.stringify(newEmployee),
   //     headers:{
   //       'Content-Type':'application/json'
@@ -215,7 +215,7 @@ export const AddCustomerpage = () => {
       console.log(newCustomer)
       await axios({
         method: 'POST',
-        url: 'http://localhost:3000/customer',
+        url: 'https://apigreendesert.onrender.com/customer',
         data: JSON.stringify(newCustomer),
         headers: {
           'Content-Type': 'application/json'

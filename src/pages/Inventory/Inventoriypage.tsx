@@ -361,7 +361,7 @@ const Inventoriypage = () => {
                                     <TableCell>{t.spot}</TableCell>
                                     <TableCell>{t.product.name}</TableCell>
                                     <TableCell>
-                                        <Button color='success' variant='outlined' onClick={async () => {
+                                        <Button color='success' disabled={disable} variant='outlined' onClick={async () => {
                                             await getIdv5(t.id).then(async (res) => {
                                                 await handleOpen2()
 
@@ -371,7 +371,7 @@ const Inventoriypage = () => {
                                         }}>Editar</Button>
 
 
-                                        &nbsp; <Button color='error' variant="outlined" onClick={() => {
+                                        &nbsp; <Button color='error' disabled={disable} variant="outlined" onClick={() => {
 
                                             getId(t.id)
 
