@@ -7,5 +7,6 @@ export interface Ijobordermodel{
     employee: employeeModel;
     status: boolean;
     inventory: IInventory[];
+    inventory2?: IInventory;
     product?: number;
 }

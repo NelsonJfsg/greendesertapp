@@ -448,6 +448,7 @@ const Proveedorespage = () => {
                                     <TableCell>{t.phonenumber}</TableCell>
                                     <TableCell>{`${t.status}`}</TableCell>
                                     <TableCell>{`${t.product.name}`}</TableCell>
+                                    
                                     <TableCell>
                                         <Button color='success'disabled={disable} variant='outlined' onClick={async () => {
                                             await getIdv5(t.id).then(async (res) => {

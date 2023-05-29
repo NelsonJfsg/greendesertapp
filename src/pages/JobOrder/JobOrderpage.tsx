@@ -209,6 +209,8 @@ const JobOrderpage = () => {
                         'Content-Type': 'application/json'
                     }
                 }).then((res) => { console.log(res) }).catch((err) => { console.log(err) })
+                setDisable(false)
+                setDisable2(false)
                 formik.values.customer = provider.customer
                 formik.values.employee = provider.employee
                 formik.values.product = provider.product
@@ -318,26 +320,39 @@ const JobOrderpage = () => {
         },
         validationSchema: validationSchema,
         onSubmit: async (values, { resetForm }) => {
+            debugger
             //alert(JSON.stringify(values, null, 2));
             const newjoborder = {
                 quantity: values.quantity,
                 customer: values.customer,
                 employee: values.employee,
                 status: true,
-                inventory: {
-                    quantity: values.quantity,
-                    spot: 'values.inventory.quantity',
-                },
+                inventory: [{
+                    quantity: values.quantity
+                }],
                 product: values.product
             }
 
+            const newjoborder2 = {
+                quantity: values.quantity,
+                customer: values.customer,
+                employee: values.employee,
+                status: true,
+                inventory: [{
+                    quantity: values.quantity,
+                    product: values.product
+                }],
+            }
+
             console.log(newjoborder)
+            
+            console.log(newjoborder2)
             //axios.put(`https://apigreendesert.onrender.com/employee/update/${params.id}`, {newEmployee}).then((res)=>{console.log(res.status)}).catch((err)=>{console.log(err)})
 
             await axios({
                 method: 'PUT',
                 url: `https://apigreendesert.onrender.com/jobOrder/update/${idv}`,
-                data: JSON.stringify(newjoborder),
+                data: newjoborder2,
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -466,9 +481,9 @@ const JobOrderpage = () => {
                             <br />
                             <Typography variant='h6'>Empleado</Typography>
                             <TextField name="employee" type='number'
-                                value={formik.values.employee.id}
+                                value={formik.values.employee}
                                 onChange={formik.handleChange}
-                                error={formik.touched.employee?.id && Boolean(formik.errors.employee?.id)}
+                                error={formik.touched.employee && Boolean(formik.errors.employee)}
                                 helperText={formik.touched.employee?.id && formik.errors.employee?.id} />
                             <br />
                             <Typography variant='h6'>Inventario</Typography>
